@@ -2,6 +2,10 @@
 // Created by tairy on 2020/11/14.
 //
 
+/**
+ * 日志操作
+ */
+
 #ifndef TJVM_LOG_H
 #define TJVM_LOG_H
 

@@ -75,7 +75,7 @@ struct tjvm_files *list_dir(char *dir, char *suffix, int recursive) {
     u_int32_t len = file_list->len;
     struct tjvm_files *rs = malloc(sizeof(struct tjvm_files));
     struct tjvm_file **files = malloc(sizeof(sizeof(tjvm_file) * len));
-    
+
     struct tjvm_file_node *prev;
     struct tjvm_file_node *node = file_list->head;
 

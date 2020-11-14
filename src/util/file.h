@@ -2,6 +2,10 @@
 // Created by tairy on 2020/11/14.
 //
 
+/**
+ * 类文件加载，文件操作
+ */
+ 
 #ifndef TJVM_FILE_H
 #define TJVM_FILE_H
 

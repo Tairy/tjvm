@@ -10,6 +10,7 @@ add_executable(tjvm
         util/log.h
         util/file.c
         util/file.h
+        util/util.h
         tjvm.c)
 
 target_link_libraries(tjvm -lzip)
