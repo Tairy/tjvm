@@ -5,7 +5,7 @@
 #ifndef TJVM_CLASSPATH_H
 #define TJVM_CLASSPATH_H
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 struct class_path {
     char *bootstrap_path;

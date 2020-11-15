@@ -5,9 +5,9 @@
 #include <string.h>
 #include <zip.h>
 
-#include "../util/file.h"
-#include "../util/log.h"
-#include "classpath.h"
+#include "util/file.h"
+#include "util/log.h"
+#include "class_path.h"
 
 static char *class_name_2_path(char *class_name);
 

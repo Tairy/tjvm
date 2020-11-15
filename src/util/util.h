@@ -5,7 +5,7 @@
 #ifndef TJVMSRC_UTIL_H
 #define TJVMSRC_UTIL_H
 
-#include <stdio.h>
+#include "stdio.h"
 
 void print_byte_code(char *bytes, unsigned int len) {
     for (int i = 1; i < len + 1; i++) {
