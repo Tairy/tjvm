@@ -30,7 +30,7 @@ struct cp_info {
 };
 
 struct cp {
-    u_int32_t len;
+    u_int16_t len;
     struct cp_info **infos;
 };
 

@@ -21,7 +21,7 @@ struct member_info {
 
 struct member_infos {
 
-    u_int32_t size;
+    u_int16_t size;
 
     struct member_info **infos;
 

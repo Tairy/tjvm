@@ -7,7 +7,7 @@
 
 #include "stdio.h"
 
-void print_byte_code(char *bytes, unsigned int len) {
+static void print_byte_code(char *bytes, unsigned int len) {
     for (int i = 1; i < len + 1; i++) {
         printf("%02hhx\t", bytes[i - 1]);
         if (i % 40 == 0) {

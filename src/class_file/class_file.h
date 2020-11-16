@@ -30,11 +30,11 @@ struct class_file {
 
     u_int16_t *interfaces;          // 接口索引
 
-    u_int16_t fields_count;         // 类中字段的数量
+//    u_int16_t fields_count;         // 类中字段的数量
 
-    struct field_infos *fields;     // 字段表
+    struct member_infos *fields;     // 字段表
 
-    struct method_infos *methods;   // 方法表
+    struct member_infos *methods;   // 方法表
 
     struct attribute_infos *attribute_infos;  // 属性表
 
