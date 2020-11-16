@@ -152,10 +152,16 @@ static struct attribute_infos *read_attributes(struct class_reader *r, struct cp
 
 static struct attribute_info *read_attribute(struct class_reader *r, struct cp *cp) {
     u_int16_t attr_name_index = read_uint16(r);
+
     char *attr_name = get_utf8(cp, attr_name_index);
+
+#include "stdio.h"
+
+    printf("index: %d, attr_name: %s\n", attr_name_index, attr_name);
     u_int32_t attr_len = read_uint32(r);
     struct attribute_info *rs = (struct attribute_info *) malloc(sizeof(struct attribute_info));
     rs->cp = cp;
+
     if (strcmp(attr_name, "Code") == 0) {
         struct attr_code *attr = (struct attr_code *) malloc(sizeof(struct attr_code));
         attr->max_stack = read_uint16(r);
@@ -165,7 +171,7 @@ static struct attribute_info *read_attribute(struct class_reader *r, struct cp *
 
         u_int16_t exception_table_length = read_uint16(r);
 
-        struct exception_table *exception_table = malloc(sizeof(exception_table));
+        struct exception_table *exception_table = malloc(sizeof(struct exception_table));
         exception_table->size = exception_table_length;
         exception_table->entrys = malloc(sizeof(struct exception_table_entry *) * exception_table_length);
 
@@ -250,15 +256,14 @@ static struct attribute_info *read_attribute(struct class_reader *r, struct cp *
 
 static struct attribute_infos *read_attributes(struct class_reader *r, struct cp *cp) {
     struct attribute_infos *rs = (struct attribute_infos *) malloc(sizeof(struct attribute_infos));
-    u_int16_t attribute_count = read_uint16(r);
-    struct attribute_info **infos = malloc(sizeof(struct attribute_infos *) * attribute_count);
-    for (int i = 0; i < attribute_count; i++) {
+    rs->size = read_uint16(r);
+    struct attribute_info **infos = malloc(sizeof(struct attribute_infos *) * rs->size);
+    for (int i = 0, len = rs->size; i < len; i++) {
         infos[i] = malloc(sizeof(struct attribute_info));
         infos[i]->cp = cp;
         infos[i]->info = read_attribute(r, cp);
     }
     rs->infos = infos;
-
     return rs;
 }
 

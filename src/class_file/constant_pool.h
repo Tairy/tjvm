@@ -5,7 +5,8 @@
 #ifndef TJVMSRC_CONSTANT_POOL_H
 #define TJVMSRC_CONSTANT_POOL_H
 
-#include <stdlib.h>
+#include "stdlib.h"
+#include "stdio.h"
 
 #define CONSTANT_Utf8_info                  1
 #define CONSTANT_Integer_info               3
@@ -35,8 +36,14 @@ struct cp {
 };
 
 static char *get_utf8(struct cp *cp, u_int16_t index) {
+
+//    for (int i = 1; i < cp->len; i++) {
+//        printf("%d: %d\n", i, cp->infos[i]->tag);
+//    }
+
     struct cp_info *ci = cp->infos[index];
-    return (char *) ci->v1;
+//    printf("%d\t", ci->tag);
+    return (char *) ci->v2;
 }
 
 #endif //TJVMSRC_CONSTANT_POOL_H

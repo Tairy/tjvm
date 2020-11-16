@@ -2,10 +2,12 @@
 // Created by tairy on 2020/11/15.
 //
 
+#include <stdio.h>
 #include "class_file.h"
 #include "constant_pool.h"
 #include "util/log.h"
 #include "util/util.h"
+#include "stdio.h"
 
 void check_magic(u_int32_t magic);
 
@@ -30,6 +32,7 @@ struct class_file *read_as_class_file(struct class_reader *r) {
     rs->interfaces = read_uint16_s(r, &(rs->interfaces_count));
     rs->fields = read_members(r, csp);
     rs->methods = read_members(r, csp);
+
     rs->attribute_infos = read_attributes(r, csp);
     return rs;
 }
@@ -64,14 +67,11 @@ struct cp *read_constant_pool(struct class_reader *r) {
     struct cp *cp = (struct cp *) malloc(sizeof(struct cp));
     cp->len = read_uint16(r);
 
-    printf("cp->len: %x\n", cp->len);
-
     struct cp_info **infos = malloc(sizeof(struct cp_info) * (cp->len - 1));
     for (int i = 1, len = cp->len; i < len; i++) {
         infos[i] = malloc(sizeof(struct cp_info));
         infos[i]->tag = read_uint8(r); // u1
-        printf("i: %d, tag_x: %x, tag_d:%d, r->position: %d\n", i, infos[i]->tag, infos[i]->tag, r->position);
-
+        
         if (infos[i]->tag == CONSTANT_Utf8_info) {
             infos[i]->v1 = read_uint16(r); // u2
             infos[i]->v2 = read_bytes(r, infos[i]->v1); // length bytes
@@ -94,5 +94,6 @@ struct cp *read_constant_pool(struct class_reader *r) {
         }
     }
 
+    cp->infos = infos;
     return cp;
 }
