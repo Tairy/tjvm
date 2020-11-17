@@ -67,6 +67,8 @@ static u_int64_t read_uint64(struct class_reader *r) {
 // 该函数内部给 size 做了赋值操作
 static u_int16_t *read_uint16_s(struct class_reader *r, u_int16_t *size) {
     *size = read_uint16(r);
+
+    // *size = 0, malloc(0) 返回一段不可操作的内存
     u_int16_t *rs = ((u_int16_t *) malloc((*size) * sizeof(u_int16_t)));
     for (int i = 0; i < (*size); i++) {
         rs[i] = read_uint16(r);

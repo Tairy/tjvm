@@ -14,6 +14,22 @@ add_executable(tjvm
         class_file/class_reader.h
         class_file/class_file.c
         class_file/class_file.h
+        runtime/object.c
+        runtime/object.h
+        runtime/thread.c
+        runtime/thread.h
+        runtime/stack.c
+        runtime/stack.h
+        runtime/frame.c
+        runtime/frame.h
+        runtime/local_vars.c
+        runtime/local_vars.h
+        runtime/operand_stack.c
+        runtime/operand_stack.h
+        runtime/class.c
+        runtime/class.h
+        runtime/class_loader.c
+        runtime/class_loader.h
         util/log.c
         util/log.h
         util/file.c
