@@ -37,6 +37,7 @@ add_executable(tjvm
         util/file.c
         util/file.h
         util/util.h
+        util/number.h
         tjvm.c)
 
 target_link_libraries(tjvm -lzip)

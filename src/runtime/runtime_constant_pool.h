@@ -30,8 +30,8 @@ struct runtime_constant_pool {
     struct runtime_constant_pool_info **infos;
 };
 
-struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp) {
-    struct runtime_constant_pool *rcp = (struct runtime_constant_pool) malloc(sizeof(struct runtime_constant_pool));
+static struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp) {
+    struct runtime_constant_pool *rcp = (struct runtime_constant_pool *) malloc(sizeof(struct runtime_constant_pool));
     rcp->size = cp->len;
 
     for (int i = 0, size = rcp->size; i < size; i++) {
@@ -44,7 +44,7 @@ struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp) {
     return rcp;
 }
 
-struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index) {
+static struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index) {
     return rcp->infos[index];
 }
 

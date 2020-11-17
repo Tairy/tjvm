@@ -3,12 +3,13 @@
 //
 
 #include "operand_stack.h"
+#include "util/number.h"
 
 struct operand_stack *new_operand_stack(u_int32_t max_stack) {
     if (max_stack > 0) {
         struct operand_stack *operand_stack = malloc(sizeof(struct operand_stack));
 
-        operand_stack->size = max_stack;
+        operand_stack->size = 0;
         operand_stack->slots = malloc(sizeof(union slot *) * max_stack);
 
         for (int i = 0; i < max_stack; i++) {
@@ -56,16 +57,35 @@ int32_t pop_int(struct operand_stack *stack) {
     return stack->slots[--stack->size]->num;
 }
 
-void push_long(struct operand_stack *stack, int64_t val);
+void push_long(struct operand_stack *stack, int64_t val) {
+    u_int32_t low = (u_int32_t) (val >> 32);
+    stack->slots[stack->size++]->num = low;
+    u_int32_t high = (u_int32_t) (val);
+    stack->slots[stack->size++]->num = high;
+}
 
-int64_t pop_long(struct operand_stack *stack);
+int64_t pop_long(struct operand_stack *stack) {
+    return (int64_t) stack->slots[--stack->size]->num | (int64_t) stack->slots[--stack->size]->num << 32;
+}
 
-void push_float(struct operand_stack *stack, float val);
+void push_float(struct operand_stack *stack, float val) {
+    stack->slots[stack->size++]->num = float_to_raw_int_bits(val);
+}
 
-float pop_float(struct operand_stack *stack);
+float pop_float(struct operand_stack *stack) {
+    return int_bits_to_float(stack->slots[--stack->size]->num);
+}
 
-void push_double(struct operand_stack *stack, double val);
+void push_double(struct operand_stack *stack, double val) {
+    int64_t int_val = double_to_raw_int_bits(val);
+    push_long(stack, int_val);
+}
 
-double pop_double(struct operand_stack *stack);
+double pop_double(struct operand_stack *stack) {
+    int64_t int_val = pop_long(stack);
+    return int_bits_to_double(int_val);
+}
 
-void *get_ref_from_top(struct operand_stack *stack, int32_t index);
+void *get_ref_from_top(struct operand_stack *stack, int32_t index) {
+
+}

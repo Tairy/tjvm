@@ -3,6 +3,7 @@
 //
 
 #include "local_vars.h"
+#include "util/number.h"
 
 struct local_vars *new_local_vars(u_int32_t max_locals) {
     if (max_locals > 0) {
@@ -55,22 +56,23 @@ void set_long(struct local_vars *vars, u_int32_t index, int64_t val) {
 }
 
 int64_t get_long(struct local_vars *vars, u_int32_t index) {
-    union slot *slot = vars->vars[index];
-    return (int64_t) vars->vars[index]->num << 32 | (int64_t) vars->vars[index + 1]->num;
+    return (int64_t) vars->vars[index]->num << 32 | (int64_t) (vars->vars[index + 1]->num);
 }
 
 void set_float(struct local_vars *vars, u_int32_t index, float val) {
-    vars->vars[index]->num = val;  // todo maybe error here.
+    vars->vars[index]->num = float_to_raw_int_bits(val);
 }
 
 float get_float(struct local_vars *vars, u_int32_t index) {
-    return (float) vars->vars[index]->num;
+    return int_bits_to_float(vars->vars[index]->num);
 }
 
 void set_double(struct local_vars *vars, u_int32_t index, double val) {
-
+    int64_t int_val = double_to_raw_int_bits(val);
+    set_long(vars, index, int_val);
 }
 
 double get_double(struct local_vars *vars, u_int32_t index) {
-
+    int64_t int_val = get_long(vars, index);
+    return int_bits_to_double(int_val);
 }
