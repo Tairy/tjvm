@@ -12,9 +12,9 @@ union slot {
     void *ref;
 };
 
-union slots {
-    u_int32_t num;
-    union slot **vars;
-};
+//union slots {
+//    u_int32_t num;
+//    union slot **vars;
+//};
 
 #endif //TJVMSRC_SLOT_H

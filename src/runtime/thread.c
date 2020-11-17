@@ -43,3 +43,11 @@ struct frame *pop_frame(struct thread *thread) {
     thread->stack->size--;
     return top_frame;
 }
+
+struct frame *top_frame(struct thread *thread) {
+    return thread->stack->top_frame;
+}
+
+struct frame *current_frame(struct thread *thread) {
+
+}

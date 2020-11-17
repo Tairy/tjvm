@@ -5,6 +5,18 @@
 #include "operand_stack.h"
 
 struct operand_stack *new_operand_stack(u_int32_t max_stack) {
+    if (max_stack > 0) {
+        struct operand_stack *operand_stack = malloc(sizeof(struct operand_stack));
+
+        operand_stack->size = max_stack;
+        operand_stack->slots = malloc(sizeof(union slot *) * max_stack);
+
+        for (int i = 0; i < max_stack; i++) {
+            operand_stack->slots[i] = malloc(sizeof(union slot));
+        }
+
+        return operand_stack;
+    }
     return NULL;
 }
 

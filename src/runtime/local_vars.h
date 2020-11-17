@@ -10,7 +10,7 @@
 
 struct local_vars {
 
-    u_int32_t size;
+    int32_t size;
 
     union slot **vars;
 };

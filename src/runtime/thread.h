@@ -22,4 +22,8 @@ void push_frame(struct thread *thread, struct frame *frame);
 
 struct frame *pop_frame(struct thread *thread);
 
+struct frame *top_frame(struct thread *thread);
+
+struct frame *current_frame(struct thread *thread);
+
 #endif //TJVMSRC_THREAD_H

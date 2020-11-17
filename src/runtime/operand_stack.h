@@ -10,7 +10,7 @@
 
 struct operand_stack {
 
-    u_int32_t size;
+    int32_t size;
 
     union slot **slots;
 };

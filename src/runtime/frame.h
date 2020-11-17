@@ -6,6 +6,9 @@
 #define TJVMSRC_FRAME_H
 
 #include "stdlib.h"
+
+#include "thread.h"
+#include "class.h"
 #include "local_vars.h"
 #include "operand_stack.h"
 
@@ -16,6 +19,15 @@ struct frame {
     struct local_vars *local_vars;
 
     struct operand_stack *operand_stack;
+
+    // 所属线程
+    struct thread *thread;
+
+    // 当前帧所在的方法
+    struct method *method;
+
+    // 下一个执行指令位置
+    int32_t next_pc;
 };
 
 struct frame *new_frame(u_int32_t max_locals, u_int32_t max_stack);
