@@ -7,17 +7,7 @@
 
 #include "stdlib.h"
 #include "runtime_constant_pool.h"
-
-union slot {
-    u_int32_t num;
-    void *ref;
-};
-
-
-union slots {
-    u_int32_t num;
-    union slot **vars;
-};
+#include "slot.h"
 
 struct field {
     struct i_klass *clazz;

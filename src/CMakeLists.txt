@@ -30,6 +30,8 @@ add_executable(tjvm
         runtime/class.h
         runtime/class_loader.c
         runtime/class_loader.h
+        runtime/slot.c
+        runtime/slot.h
         util/log.c
         util/log.h
         util/file.c

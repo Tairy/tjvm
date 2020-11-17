@@ -6,32 +6,47 @@
 #define TJVMSRC_OPERAND_STACK_H
 
 #include "stdlib.h"
+#include "slot.h"
 
 struct operand_stack {
 
+    u_int32_t size;
+
+    union slot **slots;
 };
 
 struct operand_stack *new_operand_stack(u_int32_t max_stack);
 
+void push_ref(struct operand_stack *stack, void *ref);
 
-void push_int(u_int32_t val);
+void *pop_ref(struct operand_stack *stack);
 
-u_int32_t pop_int();
+void *top_ref(struct operand_stack *stack);
 
-void push_float(float val);
+void push_var(struct operand_stack *stack, union slot *var);
 
-float pop_float();
+union slot *pop_var(struct operand_stack *stack);
 
-void push_double(double val);
+void push_boolean(struct operand_stack *stack, int8_t value);
 
-double pop_double();
+int8_t pop_boolean(struct operand_stack *stack);
 
-void push_long(long val);
+void push_int(struct operand_stack *stack, int32_t val);
 
-long pop_long();
+int32_t pop_int(struct operand_stack *stack);
 
-void push_ref(void *ref);
+void push_long(struct operand_stack *stack, int64_t val);
 
-void *pop_ref();
+int64_t pop_long(struct operand_stack *stack);
+
+void push_float(struct operand_stack *stack, float val);
+
+float pop_float(struct operand_stack *stack);
+
+void push_double(struct operand_stack *stack, double val);
+
+double pop_double(struct operand_stack *stack);
+
+void *get_ref_from_top(struct operand_stack *stack, int32_t index);
 
 #endif //TJVMSRC_OPERAND_STACK_H
