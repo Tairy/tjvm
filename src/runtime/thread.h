@@ -6,7 +6,6 @@
 #define TJVMSRC_THREAD_H
 
 #include "stdlib.h"
-
 #include "stack.h"
 #include "frame.h"
 

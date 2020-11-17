@@ -2,7 +2,6 @@
 // Created by tairy on 2020/11/17.
 //
 
-#include <stdint.h>
 #include "thread.h"
 #include "stack.h"
 

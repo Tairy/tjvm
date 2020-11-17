@@ -6,9 +6,4 @@
 #define TJVMSRC_CLASS_LOADER_H
 
 
-class class_loader{
-
-};
-
-
 #endif //TJVMSRC_CLASS_LOADER_H
