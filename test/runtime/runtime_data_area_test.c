@@ -43,6 +43,22 @@ void test_operand_stack() {
 
     push_double(operand_stack, 2.71828182845);
     printf("pop_double: %.12lf\n", pop_double(operand_stack));
+
+
+    // 连续 push
+
+    push_int(operand_stack, 1222);
+    push_int(operand_stack, -100);
+    push_long(operand_stack, 2997924580);
+    push_float(operand_stack, 3.1415926);
+    push_double(operand_stack, 2.71828182845);
+
+
+    printf("pop_double: %.12lf\n", pop_double(operand_stack));
+    printf("pop_float: %.8f\n", pop_float(operand_stack));
+    printf("pop_long: %ld\n", pop_long(operand_stack));
+    printf("pop_int: %d\n", pop_int(operand_stack));
+    printf("pop_int: %d\n", pop_int(operand_stack));
 }
 
 int main() {
