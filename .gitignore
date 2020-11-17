@@ -1,4 +1,4 @@
 .idea
-src/cmake-build-debug
-src/cmake-build-debug-coverage
+cmake-build-debug
+cmake-build-debug-coverage
 tmp

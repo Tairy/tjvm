@@ -2,12 +2,9 @@
 // Created by tairy on 2020/11/15.
 //
 
-#include <stdio.h>
 #include "class_file.h"
 #include "constant_pool.h"
 #include "util/log.h"
-#include "util/util.h"
-#include "stdio.h"
 
 void check_magic(u_int32_t magic);
 
@@ -71,7 +68,7 @@ struct cp *read_constant_pool(struct class_reader *r) {
     for (int i = 1, len = cp->len; i < len; i++) {
         infos[i] = malloc(sizeof(struct cp_info));
         infos[i]->tag = read_uint8(r); // u1
-        
+
         if (infos[i]->tag == CONSTANT_Utf8_info) {
             infos[i]->v1 = read_uint16(r); // u2
             infos[i]->v2 = read_bytes(r, infos[i]->v1); // length bytes
