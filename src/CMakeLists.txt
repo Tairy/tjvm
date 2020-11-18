@@ -32,12 +32,29 @@ add_executable(tjvm
         runtime/class_loader.h
         runtime/slot.c
         runtime/slot.h
+        runtime/oop.c
+        runtime/oop.h
         util/log.c
         util/log.h
         util/file.c
         util/file.h
         util/util.h
         util/number.h
+        interpreter/bytecode_reader.h
+        interpreter/bytecode_interpreter.h
+        interpreter/bytecode_interpreter.c
+        interpreter/ins_constant.h
+        interpreter/ins_compare.h
+        interpreter/ins_load.h
+        interpreter/ins_opcode.h
+        interpreter/ins_store.h
+        interpreter/ins_stack.h
+        interpreter/ins_math.h
+        interpreter/ins_convert.h
+        interpreter/ins_control.h
+        interpreter/ins_reference.h
+        interpreter/ins_extend.h
+        interpreter/ins_reserved.h
         tjvm.c)
 
 target_link_libraries(tjvm -lzip)

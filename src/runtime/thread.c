@@ -16,6 +16,10 @@ struct thread *create_thread() {
     return thread;
 }
 
+struct frame *create_frame(struct thread *thread, struct method *method) {
+    
+}
+
 void push_frame(struct thread *thread, struct frame *frame) {
     if (thread->stack->size > thread->stack->max_size) {
         log_error(__FILE__, __LINE__, "java.lang.StackOverflowError.");
