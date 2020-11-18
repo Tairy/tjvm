@@ -154,6 +154,7 @@ static struct attribute_info *read_attribute(struct class_reader *r, struct cp *
     u_int16_t attr_name_index = read_uint16(r);
 
     char *attr_name = get_utf8(cp, attr_name_index);
+
     u_int32_t attr_len = read_uint32(r);
     struct attribute_info *rs = (struct attribute_info *) malloc(sizeof(struct attribute_info));
     rs->cp = cp;

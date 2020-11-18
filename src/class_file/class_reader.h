@@ -10,13 +10,9 @@
 #include "class_path/class_path.h"
 
 struct class_reader {
-
     u_int32_t position;
-
     u_int32_t len;
-
     char *data;
-
 };
 
 static struct class_reader *build_class_reader(struct class_source *class_source) {
@@ -24,7 +20,6 @@ static struct class_reader *build_class_reader(struct class_source *class_source
     rs->position = 0;
     rs->len = class_source->len;
     rs->data = class_source->bytes;
-
     return rs;
 }
 

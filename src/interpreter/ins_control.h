@@ -11,7 +11,7 @@
 
 void insm_167(struct frame *frame, struct bytecode_reader *reader) {
     // GOTO
-    int32_t offset = (int32_t) read_int16(reader);
+    int32_t offset = (int32_t) next_int16(reader);
     frame->next_pc = frame->thread->pc + offset;
 }
 
@@ -22,11 +22,11 @@ void insm_169(struct frame *frame, struct bytecode_reader *reader) {}
 void insm_170(struct frame *frame, struct bytecode_reader *reader) {
     // TABLESWITCH
     skip_padding(reader);
-    int32_t default_offset = read_int32(reader);
-    int32_t low = read_int32(reader);
-    int32_t high = read_int32(reader);
+    int32_t default_offset = next_int32(reader);
+    int32_t low = next_int32(reader);
+    int32_t high = next_int32(reader);
     int32_t offset_count = high - low + 1;
-    int32_t *offsets = read_int32s(reader, offset_count);
+    int32_t *offsets = next_int32s(reader, offset_count);
     int32_t index = pop_int(frame->operand_stack);
     int32_t offset;
     if (index >= low && index <= high) {
@@ -41,9 +41,9 @@ void insm_171(struct frame *frame, struct bytecode_reader *reader) {
     // LOOKUPSWITCH
     skip_padding(reader);
     int32_t key = pop_int(frame->operand_stack);
-    int32_t default_offset = read_int32(reader);
-    int32_t offset_count = read_int32(reader);
-    int32_t *offsets = read_int32s(reader, offset_count);
+    int32_t default_offset = next_int32(reader);
+    int32_t offset_count = next_int32(reader);
+    int32_t *offsets = next_int32s(reader, offset_count);
     for (int i = 0; i < offset_count; i = i + 2) {
         if (offsets[i] == key) {
             int32_t offset = offsets[i + 1];

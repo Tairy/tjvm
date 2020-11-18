@@ -8,31 +8,29 @@
 #include "stdlib.h"
 
 struct bytecode_reader {
-
     u_int32_t pc;
-
     char *code;
 };
 
-static u_int8_t read_uint8(struct bytecode_reader *r) {
+static u_int8_t next_uint8(struct bytecode_reader *r) {
     return r->code[r->pc++];
 }
 
-static int8_t read_int8(struct bytecode_reader *r) {
+static int8_t next_int8(struct bytecode_reader *r) {
     int8_t x = *((int8_t *) r->code);
     r->pc++;
     return x;
 }
 
-static u_int16_t read_uint16(struct bytecode_reader *r) {
+static u_int16_t next_uint16(struct bytecode_reader *r) {
     return (u_int16_t) r->code[r->pc++] | (u_int16_t) r->code[r->pc++];
 }
 
-static int16_t read_int16(struct bytecode_reader *r) {
+static int16_t next_int16(struct bytecode_reader *r) {
     return (u_int16_t) r->code[r->pc++] | (u_int16_t) r->code[r->pc++];
 }
 
-static u_int32_t read_uint32(struct bytecode_reader *r) {
+static u_int32_t next_uint32(struct bytecode_reader *r) {
     int8_t x1 = r->code[r->pc++];
     int8_t x2 = r->code[r->pc++];
     int8_t x3 = r->code[r->pc++];
@@ -41,7 +39,7 @@ static u_int32_t read_uint32(struct bytecode_reader *r) {
     return (u_int32_t) x1 << 24 | (u_int32_t) x2 << 16 | (u_int32_t) x3 << 8 | (u_int32_t) x4;
 }
 
-static int32_t read_int32(struct bytecode_reader *r) {
+static int32_t next_int32(struct bytecode_reader *r) {
     int8_t x1 = r->code[r->pc++];
     int8_t x2 = r->code[r->pc++];
     int8_t x3 = r->code[r->pc++];
@@ -52,12 +50,11 @@ static int32_t read_int32(struct bytecode_reader *r) {
 
 
 // tableswitch he lookupswitch 使用
-static int32_t *read_int32s(struct bytecode_reader *r, u_int32_t size) {
+static int32_t *next_int32s(struct bytecode_reader *r, u_int32_t size) {
     int32_t *rs = (int32_t *) malloc(size * sizeof(int32_t));
     for (int i = 0; i < size; i++) {
-        rs[i] = read_int32(r);
+        rs[i] = next_int32(r);
     }
-
     return rs;
 }
 

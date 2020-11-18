@@ -9,15 +9,15 @@
 
 struct thread *create_thread() {
     struct thread *thread = malloc(sizeof(struct thread));
-    thread->pc = 0;
 
+    thread->pc = 0;
     // 虚拟机栈
     thread->stack = create_stack(1024);
     return thread;
 }
 
 struct frame *create_frame(struct thread *thread, struct method *method) {
-    
+    return new_frame(method->max_locals, method->max_stack);
 }
 
 void push_frame(struct thread *thread, struct frame *frame) {

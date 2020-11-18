@@ -12,7 +12,7 @@ struct bytecode_interpreter *build_bytecode_interpreter() {
 }
 
 int execute(struct bytecode_interpreter *bytecode_interpreter, struct thread *thread, struct method *method) {
-    struct frame *frame = create_frame(thread, method);
+    struct frame *frame = new_frame(method->max_locals, method->max_stack);
     push_frame(thread, frame);
     struct bytecode_reader *reader = (struct bytecode_reader *) malloc(sizeof(struct bytecode_reader));
     struct frame *current;

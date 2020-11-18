@@ -11,31 +11,31 @@
 
 void insm_54(struct frame *frame, struct bytecode_reader *reader) {
     // ISTORE 将 int 型数据存入指定变量表
-    set_int(frame->local_vars, read_int8(reader), pop_int(frame->operand_stack));
+    set_int(frame->local_vars, next_int8(reader), pop_int(frame->operand_stack));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_55(struct frame *frame, struct bytecode_reader *reader) {
     // LSTORE
-    set_long(frame->local_vars, read_int8(reader), pop_long(frame->operand_stack));
+    set_long(frame->local_vars, next_int8(reader), pop_long(frame->operand_stack));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_56(struct frame *frame, struct bytecode_reader *reader) {
     // FSTORE
-    set_float(frame->local_vars, read_int8(reader), pop_float(frame->operand_stack));
+    set_float(frame->local_vars, next_int8(reader), pop_float(frame->operand_stack));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_57(struct frame *frame, struct bytecode_reader *reader) {
     // DSTORE
-    set_double(frame->local_vars, read_int8(reader), pop_double(frame->operand_stack));
+    set_double(frame->local_vars, next_int8(reader), pop_double(frame->operand_stack));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_58(struct frame *frame, struct bytecode_reader *reader) {
     // ASTORE
-    set_ref(frame->local_vars, read_int8(reader), pop_ref(frame->operand_stack));
+    set_ref(frame->local_vars, next_int8(reader), pop_ref(frame->operand_stack));
     UPDATE_PC_AND_CONTINUE
 }
 

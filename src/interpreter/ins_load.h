@@ -13,31 +13,31 @@
 
 void insm_21(struct frame *frame, struct bytecode_reader *reader) {
     // ILOAD    21  0x15 将指定的 int 型局部变量推送至栈顶
-    push_int(frame->operand_stack, get_int(frame->local_vars, read_int8(reader)));
+    push_int(frame->operand_stack, get_int(frame->local_vars, next_int8(reader)));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_22(struct frame *frame, struct bytecode_reader *reader) {
     // LLOAD    22  0x16 将指定的 long 型局部变量推送至栈顶
-    push_long(frame->operand_stack, get_long(frame->local_vars, read_int8(reader)));
+    push_long(frame->operand_stack, get_long(frame->local_vars, next_int8(reader)));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_23(struct frame *frame, struct bytecode_reader *reader) {
     // FLOAD
-    push_float(frame->operand_stack, get_float(frame->local_vars, read_int8(reader)));
+    push_float(frame->operand_stack, get_float(frame->local_vars, next_int8(reader)));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_24(struct frame *frame, struct bytecode_reader *reader) {
     // DLOAD
-    push_double(frame->operand_stack, get_double(frame->local_vars, read_int8(reader)));
+    push_double(frame->operand_stack, get_double(frame->local_vars, next_int8(reader)));
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_25(struct frame *frame, struct bytecode_reader *reader) {
     // ALOAD
-    push_ref(frame->operand_stack, get_ref(frame->local_vars, read_int8(reader)));
+    push_ref(frame->operand_stack, get_ref(frame->local_vars, next_int8(reader)));
     UPDATE_PC_AND_CONTINUE
 }
 

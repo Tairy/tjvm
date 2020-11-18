@@ -8,6 +8,7 @@
 #include "stdlib.h"
 #include "runtime_constant_pool.h"
 #include "slot.h"
+#include "class_file/class_file.h"
 
 struct field {
     struct i_klass *clazz;
@@ -70,4 +71,7 @@ struct i_klass {
 struct im_klass {
     struct i_klass *clazz;
 };
+
+struct i_klass *new_klass(struct class_file *class_file);
+
 #endif //TJVMSRC_CLASS_H

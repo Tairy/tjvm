@@ -118,26 +118,26 @@ void insm_13(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_14(struct frame *frame, struct bytecode_reader *reader) {
     // DCONST_0
-    push_double(frame->operand_stack, 0);
+    push_double(frame->operand_stack, 0.0);
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_15(struct frame *frame, struct bytecode_reader *reader) {
     // DCONST_1
-    push_double(frame->operand_stack, 1);
+    push_double(frame->operand_stack, 1.0);
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_16(struct frame *frame, struct bytecode_reader *reader) {
     // BIPUSH
-    int32_t x = (int32_t) read_int8(reader);
+    int32_t x = (int32_t) next_int8(reader);
     push_int(frame->operand_stack, x);
     UPDATE_PC_AND_CONTINUE
 }
 
 void insm_17(struct frame *frame, struct bytecode_reader *reader) {
     // SIPUSH
-    int32_t x = read_int16(reader);
+    int32_t x = next_int16(reader);
     push_int(frame->operand_stack, x);
     UPDATE_PC_AND_CONTINUE
 }

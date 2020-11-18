@@ -12,7 +12,7 @@
 
 void insm_178(struct frame *frame, struct bytecode_reader *reader) {
     // GETSTATIC 获取指定类的静态类，并将其压入栈顶
-//    int16_t field_ref_index = read_int16(reader);
+//    int16_t field_ref_index = next_int16(reader);
 //    struct i_klass *clazz = frame->method->clazz;
 //    struct member_ref *field_ref = (struct member_ref *) get_runtime_constant_pool_info(clazz->constant_pool,
 //    field_ref_index)->data;

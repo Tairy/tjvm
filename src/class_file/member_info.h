@@ -12,7 +12,7 @@
 struct member_info {
     u_int16_t access_flags;             // 访问控制符
 
-    u_int16_t name_index;               // 方法名在常量池中的索引
+    u_int16_t name_index;               // 成员名在常量池中的索引
 
     u_int16_t description_index;        // 描述符字段
 

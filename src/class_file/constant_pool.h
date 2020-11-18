@@ -36,13 +36,7 @@ struct cp {
 };
 
 static char *get_utf8(struct cp *cp, u_int16_t index) {
-
-//    for (int i = 1; i < cp->len; i++) {
-//        printf("%d: %d\n", i, cp->infos[i]->tag);
-//    }
-
     struct cp_info *ci = cp->infos[index];
-//    printf("%d\t", ci->tag);
     return (char *) ci->v2;
 }
 

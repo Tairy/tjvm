@@ -19,8 +19,6 @@ struct thread {
 
 struct thread *create_thread();
 
-struct frame *create_frame(struct thread *thread, struct method *method);
-
 void push_frame(struct thread *thread, struct frame *frame);
 
 struct frame *pop_frame(struct thread *thread);
