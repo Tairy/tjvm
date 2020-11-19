@@ -17,17 +17,18 @@ static u_int8_t next_uint8(struct bytecode_reader *r) {
 }
 
 static int8_t next_int8(struct bytecode_reader *r) {
-    int8_t x = *((int8_t *) r->code);
-    r->pc++;
-    return x;
+//    int8_t x = *((int8_t *) r->code);
+//    r->pc++;
+//    return x;
+    return (int8_t) r->code[r->pc++];
 }
 
 static u_int16_t next_uint16(struct bytecode_reader *r) {
-    return (u_int16_t) r->code[r->pc++] | (u_int16_t) r->code[r->pc++];
+    return (u_int16_t) r->code[r->pc++] << 8 | (u_int16_t) r->code[r->pc++];
 }
 
 static int16_t next_int16(struct bytecode_reader *r) {
-    return (u_int16_t) r->code[r->pc++] | (u_int16_t) r->code[r->pc++];
+    return ((int16_t) r->code[r->pc++]) << 8 | ((int16_t) r->code[r->pc++]);
 }
 
 static u_int32_t next_uint32(struct bytecode_reader *r) {

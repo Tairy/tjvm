@@ -235,8 +235,8 @@ int execute(struct bytecode_interpreter *bytecode_interpreter, struct thread *th
         thread->pc = frame->next_pc;
         reader->code = current->method->code;
         reader->pc = frame->next_pc;
-        u_int8_t op_code = read_uint8(reader);
-        printf("%d\t", op_code);
+        u_int8_t op_code = next_uint8(reader);
+        printf("%x\t", op_code);
         (*bytecode_interpreter->call[op_code])(current, reader);
     }
 

@@ -82,8 +82,8 @@ void insm_159(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_160(struct frame *frame, struct bytecode_reader *reader) {
     // IF_ICMPNE
-    int32_t v1 = pop_int(frame->operand_stack);
     int32_t v2 = pop_int(frame->operand_stack);
+    int32_t v1 = pop_int(frame->operand_stack);
     int32_t offset = (int32_t) next_int16(reader);
 
     if (v1 != v2) {
@@ -93,8 +93,8 @@ void insm_160(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_161(struct frame *frame, struct bytecode_reader *reader) {
     // IF_ICMPLT
-    int32_t v1 = pop_int(frame->operand_stack);
     int32_t v2 = pop_int(frame->operand_stack);
+    int32_t v1 = pop_int(frame->operand_stack);
     int32_t offset = (int32_t) next_int16(reader);
 
     if (v1 < v2) {
@@ -104,8 +104,8 @@ void insm_161(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_162(struct frame *frame, struct bytecode_reader *reader) {
     // IF_ICMPGE
-    int32_t v1 = pop_int(frame->operand_stack);
     int32_t v2 = pop_int(frame->operand_stack);
+    int32_t v1 = pop_int(frame->operand_stack);
     int32_t offset = (int32_t) next_int16(reader);
 
     if (v1 >= v2) {
@@ -115,19 +115,21 @@ void insm_162(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_163(struct frame *frame, struct bytecode_reader *reader) {
     // IF_ICMPGT
-    int32_t v1 = pop_int(frame->operand_stack);
     int32_t v2 = pop_int(frame->operand_stack);
+    int32_t v1 = pop_int(frame->operand_stack);
     int32_t offset = (int32_t) next_int16(reader);
 
     if (v1 > v2) {
         frame->next_pc = frame->thread->pc + offset;
+    } else {
+        UPDATE_PC_AND_CONTINUE
     }
 }
 
 void insm_164(struct frame *frame, struct bytecode_reader *reader) {
     // IF_ICMPLE
-    int32_t v1 = pop_int(frame->operand_stack);
     int32_t v2 = pop_int(frame->operand_stack);
+    int32_t v1 = pop_int(frame->operand_stack);
     int32_t offset = (int32_t) next_int16(reader);
 
     if (v1 <= v2) {

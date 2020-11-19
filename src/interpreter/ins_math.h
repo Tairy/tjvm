@@ -128,6 +128,11 @@ void insm_130(struct frame *frame, struct bytecode_reader *reader) {}
 
 void insm_131(struct frame *frame, struct bytecode_reader *reader) {}
 
-void insm_132(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_132(struct frame *frame, struct bytecode_reader *reader) {
+    u_int32_t index = (u_int32_t) next_uint8(reader);
+    int32_t step = (int32_t) next_int8(reader);
+    set_int(frame->local_vars, index, get_int(frame->local_vars, index) + step);
+    UPDATE_PC_AND_CONTINUE
+}
 
 #endif //TJVMSRC_INS_MATH_H
