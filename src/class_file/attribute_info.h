@@ -12,6 +12,8 @@
 struct attribute_info {
     struct cp *cp;      // 保留文件常量池指针，后续无需再传递
     void *info;         // 属性表
+    u_int16_t attribute_index;
+    u_int32_t attribute_length;
 };
 
 struct attribute_infos {
@@ -20,20 +22,14 @@ struct attribute_infos {
 };
 
 struct exception_table_entry {
-
     u_int16_t start_pc;
-
     u_int16_t end_pc;
-
     u_int16_t handle_pc;
-
     u_int16_t catch_type;
 };
 
 struct exception_table {
-
     u_int32_t size;
-
     struct exception_table_entry **entrys;
 
 };
@@ -42,11 +38,8 @@ struct attr_code {
     u_int16_t max_stack;
     u_int16_t max_locals;
     u_int32_t code_len;
-
     char *code;
-
     struct exception_table *exception_table;
-
     struct attribute_infos *attributes;
 
 };
@@ -151,13 +144,11 @@ struct unparsed_attribute {
 static struct attribute_infos *read_attributes(struct class_reader *r, struct cp *cp);
 
 static struct attribute_info *read_attribute(struct class_reader *r, struct cp *cp) {
-    u_int16_t attr_name_index = read_uint16(r);
-
-    char *attr_name = get_utf8(cp, attr_name_index);
-
-    u_int32_t attr_len = read_uint32(r);
     struct attribute_info *rs = (struct attribute_info *) malloc(sizeof(struct attribute_info));
     rs->cp = cp;
+    rs->attribute_index = read_uint16(r);
+    char *attr_name = get_utf8(cp, rs->attribute_index);
+    rs->attribute_length = read_uint32(r);
 
     if (strcmp(attr_name, "Code") == 0) {
         struct attr_code *attr = (struct attr_code *) malloc(sizeof(struct attr_code));
@@ -167,7 +158,6 @@ static struct attribute_info *read_attribute(struct class_reader *r, struct cp *
         attr->code = read_bytes(r, attr->code_len);
 
         u_int16_t exception_table_length = read_uint16(r);
-
         struct exception_table *exception_table = malloc(sizeof(struct exception_table));
         exception_table->size = exception_table_length;
         exception_table->entrys = malloc(sizeof(struct exception_table_entry *) * exception_table_length);
@@ -244,8 +234,9 @@ static struct attribute_info *read_attribute(struct class_reader *r, struct cp *
     } else {
         struct unparsed_attribute *attr = (struct unparsed_attribute *) malloc(sizeof(struct unparsed_attribute));
         attr->name = attr_name;
-        attr->info_len = attr_len;
-        attr->info = read_bytes(r, attr_len);
+        attr->info_len = rs->attribute_length;
+        attr->info = read_bytes(r, rs->attribute_length);
+        rs->info = attr;
     }
 
     return rs;
@@ -256,9 +247,7 @@ static struct attribute_infos *read_attributes(struct class_reader *r, struct cp
     rs->size = read_uint16(r);
     struct attribute_info **infos = malloc(sizeof(struct attribute_infos *) * rs->size);
     for (int i = 0, len = rs->size; i < len; i++) {
-        infos[i] = malloc(sizeof(struct attribute_info));
-        infos[i]->cp = cp;
-        infos[i]->info = read_attribute(r, cp);
+        infos[i] = read_attribute(r, cp);
     }
     rs->infos = infos;
     return rs;

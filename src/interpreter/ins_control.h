@@ -62,14 +62,45 @@ void insm_172(struct frame *frame, struct bytecode_reader *reader) {
     UPDATE_PC_AND_CONTINUE
 }
 
-void insm_173(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_173(struct frame *frame, struct bytecode_reader *reader) {
+    // LRETURN
+    struct thread *thread = frame->thread;
+    struct frame *current_frame = pop_frame(thread);
+    struct frame *invoke_frame = top_frame(thread);
+    push_long(invoke_frame->operand_stack, pop_long(current_frame->operand_stack));
+    UPDATE_PC_AND_CONTINUE
+}
 
-void insm_174(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_174(struct frame *frame, struct bytecode_reader *reader) {
+    // FRETURN
+    struct thread *thread = frame->thread;
+    struct frame *current_frame = pop_frame(thread);
+    struct frame *invoke_frame = top_frame(thread);
+    push_float(invoke_frame->operand_stack, pop_float(current_frame->operand_stack));
+    UPDATE_PC_AND_CONTINUE
+}
 
-void insm_175(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_175(struct frame *frame, struct bytecode_reader *reader) {
+    // DRETURN
+    struct thread *thread = frame->thread;
+    struct frame *current_frame = pop_frame(thread);
+    struct frame *invoke_frame = top_frame(thread);
+    push_double(invoke_frame->operand_stack, pop_double(current_frame->operand_stack));
+    UPDATE_PC_AND_CONTINUE
+}
 
-void insm_176(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_176(struct frame *frame, struct bytecode_reader *reader) {
+    // ARETURN
+    struct thread *thread = frame->thread;
+    struct frame *current_frame = pop_frame(thread);
+    struct frame *invoke_frame = top_frame(thread);
+    push_ref(invoke_frame->operand_stack, pop_ref(current_frame->operand_stack));
+    UPDATE_PC_AND_CONTINUE
+}
 
-void insm_177(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_177(struct frame *frame, struct bytecode_reader *reader) {
+    // OP_RETURN
+    UPDATE_PC_AND_CONTINUE
+}
 
 #endif //TJVMSRC_INS_CONTROL_H

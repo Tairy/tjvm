@@ -82,6 +82,7 @@ void insm_32(struct frame *frame, struct bytecode_reader *reader) {
 }
 
 void insm_33(struct frame *frame, struct bytecode_reader *reader) {
+    // lload_3
     push_long(frame->operand_stack, get_long(frame->local_vars, 3));
     UPDATE_PC_AND_CONTINUE
 }

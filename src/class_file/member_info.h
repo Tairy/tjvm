@@ -11,20 +11,14 @@
 
 struct member_info {
     u_int16_t access_flags;             // 访问控制符
-
     u_int16_t name_index;               // 成员名在常量池中的索引
-
     u_int16_t description_index;        // 描述符字段
-
     struct attribute_infos *attributes;  // 属性表
 };
 
 struct member_infos {
-
     u_int16_t size;
-
     struct member_info **infos;
-
 };
 
 static struct member_infos *read_members(struct class_reader *r, struct cp *p) {

@@ -129,7 +129,7 @@ void insm_15(struct frame *frame, struct bytecode_reader *reader) {
 }
 
 void insm_16(struct frame *frame, struct bytecode_reader *reader) {
-    // BIPUSH
+    // BIPUSH  0x10 将单字节常量值（-128~127）推送到栈顶
     int32_t x = (int32_t) next_int8(reader);
     push_int(frame->operand_stack, x);
     UPDATE_PC_AND_CONTINUE

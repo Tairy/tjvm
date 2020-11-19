@@ -17,7 +17,7 @@ struct thread *create_thread() {
 }
 
 struct frame *create_frame(struct thread *thread, struct method *method) {
-    return new_frame(method->max_locals, method->max_stack);
+    return new_frame(thread, method);
 }
 
 void push_frame(struct thread *thread, struct frame *frame) {

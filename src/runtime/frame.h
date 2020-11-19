@@ -30,6 +30,6 @@ struct frame {
     int32_t next_pc;
 };
 
-struct frame *new_frame(u_int32_t max_locals, u_int32_t max_stack);
+struct frame *new_frame(struct thread *thread, struct method *method);
 
 #endif //TJVMSRC_FRAME_H

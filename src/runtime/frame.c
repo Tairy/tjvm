@@ -5,9 +5,11 @@
 #include "frame.h"
 #include "local_vars.h"
 
-struct frame *new_frame(u_int32_t max_locals, u_int32_t max_stack) {
+struct frame *new_frame(struct thread *thread, struct method *method) {
     struct frame *frame = (struct frame *) malloc(sizeof(struct frame));
-    frame->local_vars = new_local_vars(max_locals);
-    frame->operand_stack = new_operand_stack(max_stack);
+    frame->local_vars = new_local_vars(method->max_locals);
+    frame->operand_stack = new_operand_stack(method->max_stack);
+    frame->thread = thread;
+    frame->method = method;
     return frame;
 }

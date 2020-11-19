@@ -9,9 +9,7 @@
 #include "slot.h"
 
 struct local_vars {
-
     int32_t size;
-
     union slot **vars;
 };
 
