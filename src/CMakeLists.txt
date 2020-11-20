@@ -40,6 +40,8 @@ add_executable(tjvm
         util/log.h
         util/file.c
         util/file.h
+        util/hash_map.c
+        util/hash_map.h
         util/util.h
         util/number.h
         interpreter/bytecode_reader.h

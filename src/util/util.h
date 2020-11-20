@@ -7,6 +7,8 @@
 
 #include "stdio.h"
 
+#define NEW(type) (type *) malloc(sizeof(type))
+
 static void print_byte_code(char *bytes, unsigned int len) {
     for (int i = 1; i < len + 1; i++) {
         printf("%02hhx\t", bytes[i - 1]);
