@@ -9,9 +9,7 @@
 #include "slot.h"
 
 struct operand_stack {
-
     int32_t size;
-
     union slot **slots;
 };
 

@@ -20,17 +20,17 @@ struct class_file *read_as_class_file(struct class_reader *r) {
     rs->major_version = read_uint16(r);
     check_class_version(rs->major_version, rs->minor_version);
 
-    struct cp *csp = read_constant_pool(r);
-
-    rs->constant_pool = csp;
+    // 符号引用常量池
+    struct cp *cp = read_constant_pool(r);
+    rs->constant_pool = cp;
     rs->access_flags = read_uint16(r);
     rs->this_class = read_uint16(r);
     rs->super_class = read_uint16(r);
     rs->interfaces = read_uint16_s(r, &(rs->interfaces_count));
-    rs->fields = read_members(r, csp);
-    rs->methods = read_members(r, csp);
+    rs->fields = read_members(r, cp);
+    rs->methods = read_members(r, cp);
 
-    rs->attribute_infos = read_attributes(r, csp);
+    rs->attribute_infos = read_attributes(r, cp);
     return rs;
 }
 
@@ -83,8 +83,8 @@ struct cp *read_constant_pool(struct class_reader *r) {
             infos[i]->v1 = read_uint16(r); // u2
         } else if (infos[i]->tag == CONSTANT_Double_info ||
                    infos[i]->tag == CONSTANT_Long_info) {
-            infos[i]->v1 = read_uint32(r); // u4
-            infos[i]->v2 = read_uint32(r); // u4
+            infos[i]->v1 = read_uint32(r); // u4 high
+            infos[i]->v2 = read_uint32(r); // u4 low
             i++;
         } else {
             infos[i]->v1 = read_uint32(r); // u4

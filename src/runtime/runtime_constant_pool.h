@@ -7,23 +7,37 @@
 #define TJVMSRC_RUNTIME_CONSTANT_POOL_H
 
 #include "class_file/constant_pool.h"
+#include "class_file/class_file.h"
 #include "runtime/class.h"
+#include "class.h"
 
 struct class_ref {
     char *classname;
+    struct i_klass *clazz;
+    struct runtime_constant_pool *rcp;
 };
 
-struct member_ref {
+struct field_ref {
     char *classname;
+    struct i_klass *clazz;
+    struct runtime_constant_pool *rcp;
     char *name;
     char *descriptor;
 };
 
-//struct cp_info {
-//    u_int8_t tag;
-//    void *v1;
-//    void *v2;
-//};
+struct method_ref {
+    char *classname;
+    struct i_klass *clazz;
+    struct runtime_constant_pool *rcp;
+    char *name;
+    char *descriptor;
+};
+
+struct interface_method_ref {
+    char *classname;
+    struct i_klass *clazz;
+    struct runtime_constant_pool *rcp;
+};
 
 struct runtime_constant_pool_info {
     u_int8_t type;
@@ -32,29 +46,20 @@ struct runtime_constant_pool_info {
 
 struct runtime_constant_pool {
     u_int32_t size;
-
     struct runtime_constant_pool_info **infos;
 };
 
-static struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp) {
-    struct runtime_constant_pool *rcp = (struct runtime_constant_pool *) malloc(sizeof(struct runtime_constant_pool));
-    rcp->size = cp->len;
-    struct runtime_constant_pool_info **infos = malloc(sizeof(struct runtime_constant_pool_info *) * rcp->size);
-    for (int i = 0, size = rcp->size; i < size; i++) {
-        infos[i] = (struct runtime_constant_pool_info *) malloc(sizeof(struct runtime_constant_pool_info));
-        infos[i]->type = cp->infos[i]->tag;
-        if (cp->infos[i]->tag == CONSTANT_Double_info || cp->infos[i]->tag == CONSTANT_Long_info) {
-            i++;
-        }
-    }
+struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct i_klass *clazz);
 
-    rcp->infos = infos;
-    return rcp;
-}
+struct field_ref *new_field_ref(struct runtime_constant_pool *rcp);
 
-static struct runtime_constant_pool_info *
-get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index) {
-    return rcp->infos[index];
-}
+struct method_ref *new_method_ref(struct runtime_constant_pool *rcp);
+
+struct interface_method_ref *new_interface_method_ref(struct runtime_constant_pool *rcp);
+
+struct runtime_constant_pool *build_runtime_constant_pool(struct class_file *class_file);
+
+struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index);
+
 
 #endif //TJVMSRC_RUNTIME_CONSTANT_POOL_H

@@ -34,6 +34,8 @@ add_executable(tjvm
         runtime/slot.h
         runtime/oop.c
         runtime/oop.h
+        runtime/runtime_constant_pool.c
+        runtime/runtime_constant_pool.h
         util/log.c
         util/log.h
         util/file.c

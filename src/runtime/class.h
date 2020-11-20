@@ -11,6 +11,7 @@
 #include "class_file/class_file.h"
 #include "class_file/member_info.h"
 #include "class_file/constant_pool.h"
+#include "class_loader.h"
 
 struct field {
     struct i_klass *clazz;
@@ -58,11 +59,13 @@ struct i_klass {
     struct interfaces *interfaces;
     struct runtime_constant_pool *runtime_constant_pool;
     struct cp *origin_constant_pool; // TODO 临时指向原始常量池，后续再做优化
+    struct class_loader *class_loader;
     struct fields *fields;
     struct methods *methods;
     struct i_klass *super_class;
     u_int32_t instance_slot_count;
     u_int32_t static_slot_count;
+    union slot *static_vars;
 };
 
 // instanceMirrorClass => java.lang.class
