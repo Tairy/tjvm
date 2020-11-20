@@ -37,6 +37,8 @@ struct interface_method_ref {
     char *classname;
     struct i_klass *clazz;
     struct runtime_constant_pool *rcp;
+    char *name;
+    char *descriptor;
 };
 
 struct runtime_constant_pool_info {
@@ -51,13 +53,14 @@ struct runtime_constant_pool {
 
 struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct i_klass *clazz);
 
-struct field_ref *new_field_ref(struct runtime_constant_pool *rcp);
+struct field_ref *new_field_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
 
-struct method_ref *new_method_ref(struct runtime_constant_pool *rcp);
+struct method_ref *new_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
 
-struct interface_method_ref *new_interface_method_ref(struct runtime_constant_pool *rcp);
+struct interface_method_ref *
+new_interface_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
 
-struct runtime_constant_pool *build_runtime_constant_pool(struct class_file *class_file);
+struct runtime_constant_pool *build_runtime_constant_pool(struct i_klass *clazz);
 
 struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index);
 
