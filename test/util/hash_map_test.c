@@ -15,6 +15,8 @@ int main() {
     default_put_func(hash_map, "key6", "value6");
     default_put_func(hash_map, "key7", "value7");
     default_put_func(hash_map, "key8", "value8");
+    default_put_func(hash_map, "key9", "value9");
+    default_remove_func(hash_map, "key3");
 
     struct hash_map_iterator *iterator = create_hash_map_iterator(hash_map);
 
@@ -27,6 +29,6 @@ int main() {
     printf("result: %s, size: %d, list_size: %d\n", default_get_func(hash_map, "key"), hash_map->size,
            hash_map->list_size);
 
-    free_hash_map_iterator(&hash_map);
+    free_hash_map_iterator(&iterator);
     return 0;
 }
