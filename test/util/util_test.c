@@ -18,6 +18,12 @@ void test_stack();
 
 void test_expression();
 
+u_int8_t pre_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list);
+
+u_int8_t in_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list);
+
+u_int8_t post_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list);
+
 int main() {
     test_has_map();
     test_list();
@@ -157,32 +163,41 @@ void expression_translate(stack *stack, char *a, char *b) {
     b[j] = '\0';
 }
 
+void destroy_str(void *data) {
+    free(data);
+}
+
 struct bi_tree *build_bi_tree(stack *stack, char *b) {
     int i = 0;
     struct bi_tree *bi_tree = NEW(struct bi_tree);
     struct bi_tree_node *bi_tree_node, *root;
-    // todo destroy function.
-    bi_tree_init(bi_tree, NULL);
+    bi_tree_init(bi_tree, destroy_str);
     while (b[i] != '\0') {
-        printf("%c", b[i]);
-
         if (b[i] == '+' || b[i] == '-' || b[i] == '*' || b[i] == '/' || b[i] == '^') {
             bi_tree_node = NEW(struct bi_tree_node);
-            bi_tree_node->data = b[i];
+
+            char tmp[4] = {0};
+            tmp[0] = b[i];
+            tmp[1] = '\0';
+            bi_tree_node->data = malloc(2);
+            strcpy(bi_tree_node->data, tmp);
+
             stack_pop(stack, &bi_tree_node->right);
             stack_pop(stack, &bi_tree_node->left);
             stack_push(stack, bi_tree_node);
             bi_tree->size++;
         } else {
             bi_tree_node = NEW(struct bi_tree_node);
-            char tmp[4] = {0};
+            char tmp[8] = {0};
             int j = 0;
             while (b[i] != ' ') {
-                tmp[j++] = b[i];
-                i++;
+                tmp[j++] = b[i++];
             }
             tmp[j] = '\0';
-            bi_tree_node->data = tmp;
+            bi_tree_node->data = malloc(j + 1);
+            memset(bi_tree_node->data, 0, j + 1);
+            strcpy(bi_tree_node->data, tmp);
+
             bi_tree_node->left = NULL;
             bi_tree_node->right = NULL;
             stack_push(stack, bi_tree_node);
@@ -208,14 +223,124 @@ void test_expression() {
     struct list *stack1 = NEW(struct list);
     STACK_INIT(stack1, NULL);
     struct bi_tree *bi_tree = build_bi_tree(stack1, b);
+
+    struct list *list_pre_order = NEW(struct list);
+    pre_order_iter_bi_tree(bi_tree->root, list_pre_order);
+
+    printf("==========================\n");
+
+    for (struct list_element *e = list_pre_order->head; e != NULL; e = e->next) {
+        printf("bi_tree_pre_list_data: %s\n", e->data);
+    }
+
+    printf("==========================\n");
+
+    struct list *list_in_order = NEW(struct list);
+    in_order_iter_bi_tree(bi_tree->root, list_in_order);
+
+    for (struct list_element *e = list_in_order->head; e != NULL; e = e->next) {
+        printf("bi_tree_in_list_data: %s\n", e->data);
+    }
+
+    printf("==========================\n");
+
+    struct list *list_post_order = NEW(struct list);
+    post_order_iter_bi_tree(bi_tree->root, list_post_order);
+
+    for (struct list_element *e = list_post_order->head; e != NULL; e = e->next) {
+        printf("bi_tree_post_list_data: %s\n", e->data);
+    }
+
+    bi_tree_destroy(bi_tree);
+    list_destroy(list_pre_order);
+    list_destroy(list_in_order);
+    list_destroy(list_post_order);
     STACK_DESTROY(stack1);
 }
 
 /**
  * 前序遍历二叉树
  *
+ * @param node
+ * @param list
  * @return
  */
 u_int8_t pre_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list) {
+    if (!BI_TREE_IS_EOB(node)) {
+        if (list_ins_next(list, LIST_TAIL(list), BI_TREE_DATA(node)) != 0) {
+            return -1;
+        }
 
+        if (!BI_TREE_IS_EOB(BI_TREE_LEFT(node)) != 0) {
+            if (pre_order_iter_bi_tree(BI_TREE_LEFT(node), list) != 0) {
+                return -1;
+            }
+
+            if (!BI_TREE_IS_EOB(BI_TREE_RIGHT(node)) != 0) {
+                if (pre_order_iter_bi_tree(BI_TREE_RIGHT(node), list) != 0) {
+                    return -1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * 中序遍历二叉树
+ *
+ * @param node
+ * @param list
+ * @return
+ */
+u_int8_t in_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list) {
+    if (!BI_TREE_IS_EOB(node)) {
+        if (!BI_TREE_IS_EOB(BI_TREE_LEFT(node))) {
+            if (in_order_iter_bi_tree(BI_TREE_LEFT(node), list) != 0) {
+                return -1;
+            }
+        }
+
+        if (list_ins_next(list, LIST_TAIL(list), BI_TREE_DATA(node)) != 0) {
+            return -1;
+        }
+
+        if (!BI_TREE_IS_EOB(BI_TREE_RIGHT(node))) {
+            if (in_order_iter_bi_tree(BI_TREE_RIGHT(node), list) != 0) {
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * 后序遍历二叉树
+ *
+ * @param node
+ * @param list
+ * @return
+ */
+u_int8_t post_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list) {
+    if (!BI_TREE_IS_EOB(node)) {
+        if (!BI_TREE_IS_EOB(BI_TREE_LEFT(node))) {
+            if (post_order_iter_bi_tree(BI_TREE_LEFT(node), list) != 0) {
+                return -1;
+            }
+        }
+
+        if (!BI_TREE_IS_EOB(node)) {
+            if (post_order_iter_bi_tree(BI_TREE_RIGHT(node), list) != 0) {
+                return -1;
+            }
+        }
+
+        if (list_ins_next(list, LIST_TAIL(list), BI_TREE_DATA(node)) != 0) {
+            return -1;
+        }
+    }
+
+    return 0;
 }
