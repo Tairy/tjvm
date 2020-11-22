@@ -11,6 +11,8 @@ add_executable(hash_map_test
         ${PARENT_DIR}/src/util/rb_tree.h
         ${PARENT_DIR}/src/util/bi_tree.h
         ${PARENT_DIR}/src/util/bi_tree.c
+        ${PARENT_DIR}/src/util/bis_tree.c
+        ${PARENT_DIR}/src/util/bis_tree.h
         ${PARENT_DIR}/src/util/list.c
         ${PARENT_DIR}/src/util/list.h
         ${PARENT_DIR}/src/util/stack.c

@@ -225,7 +225,7 @@ void test_expression() {
     struct bi_tree *bi_tree = build_bi_tree(stack1, b);
 
     struct list *list_pre_order = NEW(struct list);
-    pre_order_iter_bi_tree(bi_tree->root, list_pre_order);
+    pre_order_iter_bi_tree(BI_TREE_ROOT(bi_tree), list_pre_order);
 
     printf("==========================\n");
 
@@ -236,7 +236,7 @@ void test_expression() {
     printf("==========================\n");
 
     struct list *list_in_order = NEW(struct list);
-    in_order_iter_bi_tree(bi_tree->root, list_in_order);
+    in_order_iter_bi_tree(BI_TREE_ROOT(bi_tree), list_in_order);
 
     for (struct list_element *e = list_in_order->head; e != NULL; e = e->next) {
         printf("bi_tree_in_list_data: %s\n", e->data);
@@ -245,7 +245,7 @@ void test_expression() {
     printf("==========================\n");
 
     struct list *list_post_order = NEW(struct list);
-    post_order_iter_bi_tree(bi_tree->root, list_post_order);
+    post_order_iter_bi_tree(BI_TREE_ROOT(bi_tree), list_post_order);
 
     for (struct list_element *e = list_post_order->head; e != NULL; e = e->next) {
         printf("bi_tree_post_list_data: %s\n", e->data);

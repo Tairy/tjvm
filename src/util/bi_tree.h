@@ -25,7 +25,7 @@ struct bi_tree {
 
     u_int32_t size;
 
-    u_int32_t (*compare)(const void *key1, const void *key2);
+    u_int8_t (*compare)(const void *key1, const void *key2);
 
     void (*destroy)(void *data);
 
