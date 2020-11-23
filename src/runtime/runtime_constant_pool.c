@@ -36,7 +36,7 @@ struct runtime_constant_pool *build_runtime_constant_pool(struct i_klass *clazz)
                 infos[i]->data = new_method_ref(rcp, cp->infos[i], clazz);
                 break;
             case CONSTANT_Interface_Method_ref_info:
-                infos[i]->data = new_interface_method_ref(rcp);
+                infos[i]->data = new_interface_method_ref(rcp, cp, clazz);
                 break;
         }
     }

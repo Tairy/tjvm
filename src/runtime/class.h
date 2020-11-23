@@ -73,7 +73,7 @@ struct im_klass {
     struct i_klass *clazz;
 };
 
-struct i_klass *new_klass(struct class_file *class_file);
+struct i_klass *new_klass(struct class_loader *class_loader, struct class_file *class_file);
 
 struct fields *new_fields(struct i_klass *clazz, struct member_infos *fields);
 

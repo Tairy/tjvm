@@ -27,6 +27,11 @@ void start_tjvm() {
                                              "/home/tairy/Documents/Working/tjvm/tmp");
     struct class_loader *class_loader = new_class_loader(cp);
     struct i_klass *clazz = load_class(class_loader, "Hello.class");
+
+    if (clazz == NULL) {
+        return;
+    }
+
     struct method *main_method = get_main_method(clazz);
     struct bytecode_interpreter *b = build_bytecode_interpreter();
     struct thread *thread = create_thread();

@@ -165,10 +165,7 @@ static void *default_remove_func(struct hash_map *hash_map, void *key) {
     if (result && hash_map->size < hash_map->list_size / 2) {
         reset_hash_map(hash_map, hash_map->list_size / 2);
     }
-
     return entry_key;
-
-
 }
 
 static int8_t default_exists_func(struct hash_map *hash_map, void *key) {
@@ -184,7 +181,6 @@ static int8_t default_exists_func(struct hash_map *hash_map, void *key) {
 
             entry = entry->next;
         }
-
         return 0;
     }
 }
