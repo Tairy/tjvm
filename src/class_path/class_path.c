@@ -96,6 +96,23 @@ static char *class_name_2_path(char *class_name) {
     return r;
 }
 
+// TODO： 临时拼了一个函数，后续再完善
+static char *get_class_file_name(char *class_name) {
+    int32_t len = strlen(class_name);
+    char *class_file_name_suffix = ".class";
+    char *x;
+    while (len--) {
+        if (class_name[len] == '/') {
+            x = class_name + len + 1;
+            break;
+        }
+    }
+
+    char *class_file_name = (char *) malloc(strlen(class_file_name_suffix) + strlen(x));
+    sprintf(class_file_name, "%s%s", x, class_file_name_suffix);
+    return class_file_name;
+}
+
 struct class_source *read_bootstrap_class_path(struct class_path *class_path, char *class_name) {
     return read_class_in_jar_dir(class_path->bootstrap_path, class_name);
 }
@@ -147,7 +164,7 @@ static struct class_source *read_class_in_dir(char *dir, char *class_name) {
     struct class_source *source = NULL;
     unsigned int path_len = strlen(dir);
     struct tjvm_files *files = list_dir(dir, ".class", 1);
-    char *c_path = class_name_2_path(class_name);
+    char *c_path = get_class_file_name(class_name);
 
     for (int i = 0, size = files->len; i < size; i++) {
         struct tjvm_file *f = files->files[i];

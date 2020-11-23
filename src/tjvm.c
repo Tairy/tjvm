@@ -26,7 +26,7 @@ void start_tjvm() {
     struct class_path *cp = build_class_path("/home/tairy/Documents/Working/tjvm/tmp",
                                              "/home/tairy/Documents/Working/tjvm/tmp");
     struct class_loader *class_loader = new_class_loader(cp);
-    struct i_klass *clazz = load_class(class_loader, "Hello.class");
+    struct i_klass *clazz = load_class(class_loader, "com/sqkb/Hello");
 
     if (clazz == NULL) {
         return;
