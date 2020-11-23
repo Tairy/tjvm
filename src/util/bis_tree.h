@@ -16,21 +16,21 @@
 
 struct avl_node {
     void *data;
-    u_int8_t hidden; // 标识该节点已经移除
-    u_int8_t factor; // 平衡因子
+    int8_t hidden; // 标识该节点已经移除
+    int8_t factor; // 平衡因子
 };
 
 // public interface
-void bis_tree_init(struct bi_tree *tree, u_int8_t(*compare)(const void *key1, const void *key2),
+void bis_tree_init(struct bi_tree *tree, int8_t(*compare)(const void *key1, const void *key2),
                    void (*destroy)(void *data));
 
 void bis_tree_destroy(struct bi_tree *tree);
 
-u_int8_t bis_tree_insert(struct bi_tree *tree, const void *data);
+int8_t bis_tree_insert(struct bi_tree *tree, const void *data);
 
-u_int8_t bis_tree_remove(struct bi_tree *tree, const void *data);
+int8_t bis_tree_remove(struct bi_tree *tree, const void *data);
 
-u_int8_t bis_tree_lookup(struct bi_tree *tree, void **data);
+int8_t bis_tree_lookup(struct bi_tree *tree, void **data);
 
 
 #endif //TJVMTEST_BIS_TREE_H

@@ -7,6 +7,7 @@
 #include "util/list.h"
 #include "util/util.h"
 #include "util/stack.h"
+#include "util/bis_tree.h"
 
 void test_has_map();
 
@@ -17,6 +18,8 @@ void test_list();
 void test_stack();
 
 void test_expression();
+
+void test_bis_tree();
 
 u_int8_t pre_order_iter_bi_tree(const struct bi_tree_node *node, struct list *list);
 
@@ -30,6 +33,7 @@ int main() {
     test_stack();
     test_expression();
     test_bi_tree();
+    test_bis_tree();
     return 0;
 }
 
@@ -234,6 +238,7 @@ void test_expression() {
     }
 
     printf("==========================\n");
+    printf("a: %s, b: %s\n", a, b);
 
     struct list *list_in_order = NEW(struct list);
     in_order_iter_bi_tree(BI_TREE_ROOT(bi_tree), list_in_order);
@@ -243,6 +248,7 @@ void test_expression() {
     }
 
     printf("==========================\n");
+    printf("a: %s, b: %s\n", a, b);
 
     struct list *list_post_order = NEW(struct list);
     post_order_iter_bi_tree(BI_TREE_ROOT(bi_tree), list_post_order);
@@ -251,11 +257,58 @@ void test_expression() {
         printf("bi_tree_post_list_data: %s\n", e->data);
     }
 
+    printf("==========================\n");
+
     bi_tree_destroy(bi_tree);
     list_destroy(list_pre_order);
     list_destroy(list_in_order);
     list_destroy(list_post_order);
     STACK_DESTROY(stack1);
+}
+
+int8_t bis_tree_data_compare(const void *key1, const void *key2) {
+
+    int32_t int_key1 = (int32_t) key1;
+    int32_t int_key2 = (int32_t) key2;
+
+    if (int_key1 < int_key2) {
+        return -1;
+    } else if (int_key1 == int_key2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+void bis_tree_node_destroy(void *data) {
+    free(data);
+}
+
+void test_bis_tree() {
+    struct bi_tree *bis_tree = NEW(struct bi_tree);
+    bis_tree_init(bis_tree, bis_tree_data_compare, bis_tree_node_destroy);
+    bis_tree_insert(bis_tree, 5);
+    bis_tree_insert(bis_tree, 4);
+    bis_tree_insert(bis_tree, 3);
+    bis_tree_insert(bis_tree, 2);
+    bis_tree_insert(bis_tree, 1);
+    bis_tree_insert(bis_tree, 6);
+    bis_tree_insert(bis_tree, 7);
+    bis_tree_insert(bis_tree, 9);
+    bis_tree_insert(bis_tree, 8);
+    bis_tree_insert(bis_tree, 10);
+//    bis_tree_insert(bis_tree, 11);
+//    bis_tree_insert(bis_tree, 12);
+
+    struct list *list_post_order = NEW(struct list);
+    post_order_iter_bi_tree(BI_TREE_ROOT(bis_tree), list_post_order);
+
+    for (struct list_element *e = list_post_order->head; e != NULL; e = e->next) {
+        struct avl_node *node = (struct avl_node *) BI_TREE_DATA(e);
+        printf("data: %d, factor: %d, hidden: %d \n", node->data, node->factor, node->hidden);
+    }
+    bis_tree_destroy(bis_tree);
+    list_destroy(list_post_order);
 }
 
 /**

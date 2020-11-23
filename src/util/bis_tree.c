@@ -12,13 +12,15 @@ static void rotate_left(struct bi_tree_node **node) {
 
     left = BI_TREE_LEFT(*node);
 
-    if (((struct avl_node *) BI_TREE_RIGHT(left))->factor == AVL_LEFT_HEAVY) {
+    if (((struct avl_node *) BI_TREE_DATA(left))->factor == AVL_LEFT_HEAVY) {
+        // LL
         BI_TREE_LEFT(*node) = BI_TREE_RIGHT(left);
-        BI_TREE_RIGHT(*node) = *node;
+        BI_TREE_RIGHT(left) = *node;
         ((struct avl_node *) BI_TREE_DATA(*node))->factor = AVL_BALANCED;
         ((struct avl_node *) BI_TREE_DATA(left))->factor = AVL_BALANCED;
         *node = left;
     } else {
+        // LR
         grand_child = BI_TREE_RIGHT(left);
         BI_TREE_RIGHT(left) = BI_TREE_LEFT(grand_child);
         BI_TREE_LEFT(grand_child) = left;
@@ -48,14 +50,17 @@ static void rotate_left(struct bi_tree_node **node) {
 static void rotate_right(struct bi_tree_node **node) {
     struct bi_tree_node *right, *grand_child;
 
-    right = BI_TREE_LEFT(*node);
+    right = BI_TREE_RIGHT(*node);
 
     if (((struct avl_node *) BI_TREE_DATA(right))->factor == AVL_RIGHT_HEAVY) {
+        // RR
         BI_TREE_RIGHT(*node) = BI_TREE_LEFT(right);
         BI_TREE_LEFT(right) = *node;
         ((struct avl_node *) BI_TREE_DATA(*node))->factor = AVL_BALANCED;
         ((struct avl_node *) BI_TREE_DATA(right))->factor = AVL_BALANCED;
+        *node = right;
     } else {
+        // RL
         grand_child = BI_TREE_LEFT(right);
         BI_TREE_LEFT(right) = BI_TREE_RIGHT(grand_child);
         BI_TREE_RIGHT(grand_child) = right;
@@ -74,6 +79,7 @@ static void rotate_right(struct bi_tree_node **node) {
             case AVL_RIGHT_HEAVY:
                 ((struct avl_node *) BI_TREE_DATA(*node))->factor = AVL_LEFT_HEAVY;
                 ((struct avl_node *) BI_TREE_DATA(right))->factor = AVL_BALANCED;
+                break;
         }
 
         ((struct avl_node *) BI_TREE_DATA(grand_child))->factor = AVL_BALANCED;
@@ -143,16 +149,16 @@ static void destroy_right(struct bi_tree *tree, struct bi_tree_node *node) {
  * 如果任何一个节点的平衡因子变成 ±2，就必须从这个节点往下重新平衡这棵树，这个重新平衡的过程中称为旋转。
  *
  * @param tree 树
- * @param node
- * @param data 待插入的节点
- * @param balanced 是否平衡
+ * @param node 父节点
+ * @param data 待插入的节点数据
+ * @param balanced 父节点是否平衡
  * @return
  */
-static u_int8_t insert(struct bi_tree *tree, struct bi_tree_node **node, const void *data, u_int8_t *balanced) {
+static int8_t insert(struct bi_tree *tree, struct bi_tree_node **node, const void *data, u_int8_t *balanced) {
     struct avl_node *avl_node;
-    u_int8_t cmpval, retval;
+    int8_t cmpval, retval;
 
-    // 是否为节点
+    // 空节点直接左边插入
     if (BI_TREE_IS_EOB(*node)) {
         if ((avl_node = (struct avl_node *) malloc(sizeof(struct avl_node))) == NULL) {
             return -1;
@@ -228,6 +234,7 @@ static u_int8_t insert(struct bi_tree *tree, struct bi_tree_node **node, const v
                     case AVL_LEFT_HEAVY:
                         ((struct avl_node *) BI_TREE_DATA(*node))->factor = AVL_BALANCED;
                         *balanced = 1;
+                        break;
                     case AVL_BALANCED:
                         ((struct avl_node *) BI_TREE_DATA(*node))->factor = AVL_RIGHT_HEAVY;
                         break;
@@ -255,7 +262,7 @@ static u_int8_t insert(struct bi_tree *tree, struct bi_tree_node **node, const v
     return 0;
 }
 
-static u_int8_t hide(struct bi_tree *tree, struct bi_tree_node *node, const void *data) {
+static int8_t hide(struct bi_tree *tree, struct bi_tree_node *node, const void *data) {
     u_int8_t cmpval, retval;
 
     if (BI_TREE_IS_EOB(node)) {
@@ -273,8 +280,8 @@ static u_int8_t hide(struct bi_tree *tree, struct bi_tree_node *node, const void
     return retval;
 }
 
-static u_int8_t lookup(struct bi_tree *tree, struct bi_tree_node *node, void **data) {
-    u_int8_t cmpval, retval;
+static int8_t lookup(struct bi_tree *tree, struct bi_tree_node *node, void **data) {
+    int8_t cmpval, retval;
 
     if (BI_TREE_IS_EOB(node)) {
         return -1;
@@ -297,7 +304,7 @@ static u_int8_t lookup(struct bi_tree *tree, struct bi_tree_node *node, void **d
     return retval;
 }
 
-void bis_tree_init(struct bi_tree *tree, u_int8_t(*compare)(const void *key1, const void *key2),
+void bis_tree_init(struct bi_tree *tree, int8_t (*compare)(const void *key1, const void *key2),
                    void (*destroy)(void *data)) {
     bi_tree_init(tree, destroy);
     tree->compare = compare;
@@ -313,9 +320,9 @@ void bis_tree_destroy(struct bi_tree *tree) {
  * @param data 待插入的节点
  * @return 如果插入成功，返回 0, 如果插入的节点已经在树中存在，返回 1, 否则返回 -1
  */
-u_int8_t bis_tree_insert(struct bi_tree *tree, const void *data) {
+int8_t bis_tree_insert(struct bi_tree *tree, const void *data) {
     u_int8_t balanced = 0;
-
+    return insert(tree, &BI_TREE_ROOT(tree), data, &balanced);
 }
 
 /**
@@ -325,11 +332,11 @@ u_int8_t bis_tree_insert(struct bi_tree *tree, const void *data) {
  * @param data 待删除的节点
  * @return
  */
-u_int8_t bis_tree_remove(struct bi_tree *tree, const void *data) {
+int8_t bis_tree_remove(struct bi_tree *tree, const void *data) {
     return hide(tree, BI_TREE_ROOT(tree), data);
 }
 
-u_int8_t bis_tree_lookup(struct bi_tree *tree, void **data) {
+int8_t bis_tree_lookup(struct bi_tree *tree, void **data) {
     return lookup(tree, BI_TREE_ROOT(tree), data);
 }
 
