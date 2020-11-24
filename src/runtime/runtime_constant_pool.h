@@ -51,16 +51,21 @@ struct runtime_constant_pool {
     struct runtime_constant_pool_info **infos;
 };
 
-struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct i_klass *clazz);
+struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
+                                struct class_loader *class_loader);
 
-struct field_ref *new_field_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
+struct field_ref *new_field_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
+                                struct class_loader *class_loader);
 
-struct method_ref *new_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
+struct method_ref *
+new_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
+               struct class_loader *class_loader);
 
 struct interface_method_ref *
-new_interface_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct i_klass *clazz);
+new_interface_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
+                         struct class_loader *class_loader);
 
-struct runtime_constant_pool *build_runtime_constant_pool(struct i_klass *clazz);
+struct runtime_constant_pool *build_runtime_constant_pool(struct class_loader *class_loader, struct cp *cp);
 
 struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index);
 
