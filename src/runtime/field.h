@@ -17,7 +17,7 @@ struct field {
     char *name;
 
     char *descriptor;
-    // 属性初始化值
+    // 静态变量属性初始化值
     u_int32_t cp_info_index;
     // 属性存储位置
     u_int32_t slot_index;

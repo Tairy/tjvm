@@ -8,6 +8,8 @@
 #include "class_file/class_file.h"
 #include "class_file/member_info.h"
 #include "runtime/class.h"
+#include "runtime/method.h"
+#include "runtime/field.h"
 #include "interpreter/bytecode_interpreter.h"
 #include "runtime/class_loader.h"
 #include "util/util.h"
@@ -32,10 +34,10 @@ void start_tjvm() {
         return;
     }
 
-    struct method *main_method = get_main_method(clazz);
-    struct bytecode_interpreter *b = build_bytecode_interpreter();
-    struct thread *thread = create_thread();
-    execute(b, thread, main_method);
+//    struct method *main_method = get_main_method(clazz);
+//    struct bytecode_interpreter *b = build_bytecode_interpreter();
+//    struct thread *thread = create_thread();
+//    execute(b, thread, main_method);
 }
 
 struct method *get_main_method(struct i_klass *clazz) {

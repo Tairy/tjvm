@@ -15,6 +15,7 @@
 #include "ins_extend.h"
 #include "ins_reserved.h"
 #include "ins_convert.h"
+#include "runtime/method.h"
 
 struct bytecode_interpreter *build_bytecode_interpreter() {
     struct bytecode_interpreter *interpreter = malloc(sizeof(struct bytecode_interpreter));

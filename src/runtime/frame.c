@@ -4,6 +4,7 @@
 
 #include "frame.h"
 #include "local_vars.h"
+#include "method.h"
 
 struct frame *new_frame(struct thread *thread, struct method *method) {
     struct frame *frame = (struct frame *) malloc(sizeof(struct frame));

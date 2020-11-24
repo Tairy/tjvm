@@ -16,6 +16,18 @@ struct fields *new_fields(struct i_klass *clazz, struct member_infos *origin_fie
         fields[i]->clazz = clazz;
         fields[i]->access_flags = origin_fields->infos[i]->access_flags;
         fields[i]->name = get_utf8(clazz->origin_constant_pool, origin_fields->infos[i]->name_index);
+
+        if (origin_fields->infos[i]->attributes->size > 0) {
+            for (int j = 0; j < origin_fields->infos[i]->attributes->size; j++) {
+                char *attr_name = get_utf8(clazz->origin_constant_pool,
+                                           origin_fields->infos[i]->attributes->infos[j]->attribute_index);
+
+                if (strcmp(attr_name, "ConstantValue") == 0) {
+                    struct constant_value_attribute *attr = origin_fields->infos[i]->attributes->infos[j]->info;
+                    fields[i]->cp_info_index = attr->constant_value_index;
+                }
+            }
+        }
     }
 
     f->fields = fields;
