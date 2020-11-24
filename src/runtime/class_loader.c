@@ -5,6 +5,9 @@
 #include "stdlib.h"
 #include "util/util.h"
 #include "class_loader.h"
+#include "field.h"
+#include "string.h"
+#include "util/number.h"
 
 struct i_klass *load_no_array_class(struct class_loader *class_loader, char *class_name);
 
@@ -19,6 +22,14 @@ void link(struct i_klass *clazz);
 void verify(struct i_klass *clazz);
 
 void prepare(struct i_klass *clazz);
+
+void cal_instance_field_slot_ids(struct i_klass *clazz);
+
+void cal_static_field_slot_ids(struct i_klass *clazz);
+
+void alloc_and_init_static_vars(struct i_klass *clazz);
+
+void init_static_final_var(struct i_klass *clazz, struct field *field);
 
 struct class_loader *new_class_loader(struct class_path *class_path) {
     struct class_loader *class_loader = NEW(struct class_loader);
@@ -83,7 +94,83 @@ void verify(struct i_klass *clazz) {
 }
 
 void prepare(struct i_klass *clazz) {
-    // todo
-    // 给变量分配空间并给予初始值
+    // 给变量分配槽位、初始值化静态变量
+    cal_instance_field_slot_ids(clazz);
+    cal_static_field_slot_ids(clazz);
+    alloc_and_init_static_vars(clazz);
+}
+
+void cal_instance_field_slot_ids(struct i_klass *clazz) {
+    u_int32_t slot_index = 0;
+
+    if (clazz->super_class != NULL) {
+        slot_index = clazz->super_class->instance_slot_count;
+    }
+
+    for (int i = 0, len = clazz->fields->size; i < len; i++) {
+        struct field *field = clazz->fields->fields[i];
+        if (is_static(field) == 0) {
+            field->slot_index = slot_index;
+            slot_index++;
+            if (is_long_or_double(field)) {
+                slot_index++;
+            }
+        }
+    }
+    clazz->instance_slot_count = slot_index;
+}
+
+void cal_static_field_slot_ids(struct i_klass *clazz) {
+    u_int32_t slot_index = 0;
+
+    for (int i = 0, len = clazz->fields->size; i < len; i++) {
+        struct field *field = clazz->fields->fields[i];
+        if (is_static(field) == 1) {
+            field->slot_index = slot_index;
+            slot_index++;
+            if (is_long_or_double(field)) {
+                slot_index++;
+            }
+        }
+    }
+    clazz->static_slot_count = slot_index;
+}
+
+void alloc_and_init_static_vars(struct i_klass *clazz) {
+    clazz->static_vars = malloc(sizeof(union slot) * clazz->static_slot_count);
+    for (int i = 0, len = clazz->fields->size; i < len; i++) {
+        struct field *field = clazz->fields->fields[i];
+        if (is_static(field) == 1 && is_final(field) == 1) {
+            init_static_final_var(clazz, field);
+        }
+    }
+}
+
+void init_static_final_var(struct i_klass *clazz, struct field *field) {
+    if (field->cp_info_index > 0) {
+        if (strcmp(field->descriptor, "Z") == 0 || strcmp(field->descriptor, "B") == 0 ||
+            strcmp(field->descriptor, "C") == 0 || strcmp(field->descriptor, "S") == 0 ||
+            strcmp(field->descriptor, "I") == 0) {
+            set_int(
+                    clazz->static_vars, field->slot_index,
+                    clazz->origin_constant_pool->infos[field->cp_info_index]->v1
+            );
+        } else if (strcmp(field->descriptor, "J") == 0) {
+            set_long(clazz->static_vars, field->slot_index,
+                     (((int64_t) (clazz->origin_constant_pool->infos[field->cp_info_index]->v1) << 32) |
+                      ((int64_t) (clazz->origin_constant_pool->infos[field->cp_info_index]->v2)))
+            );
+        } else if (strcmp(field->descriptor, "F") == 0) {
+            set_float(clazz->static_vars, field->slot_index,
+                      int_bits_to_float((int) (clazz->origin_constant_pool->infos[field->cp_info_index]->v1)));
+        } else if (strcmp(field->descriptor, "D") == 0) {
+            set_double(clazz->static_vars, field->slot_index, int_bits_to_double(
+                    (((int64_t) (clazz->origin_constant_pool->infos[field->cp_info_index]->v1) << 32) |
+                     ((int64_t) (clazz->origin_constant_pool->infos[field->cp_info_index]->v2)))
+            ));
+        } else if (strcmp(field->descriptor, "Ljava/lang/String;")) {
+            // todo
+        }
+    }
 }
 

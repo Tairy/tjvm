@@ -12,6 +12,7 @@
 #include "class_reader.h"
 
 struct class_file {
+
     u_int32_t magic;                // 魔数：0xCAFEBABE
 
     u_int16_t minor_version;        // 类文件次版本号
@@ -29,8 +30,6 @@ struct class_file {
     u_int16_t interfaces_count;     // 实现的接口数量
 
     u_int16_t *interfaces;          // 接口索引
-
-//    u_int16_t fields_count;         // 类中字段的数量
 
     struct member_infos *fields;     // 字段表
 
