@@ -33,6 +33,14 @@ add_executable(tjvm
         runtime/field.h
         runtime/method.c
         runtime/method.h
+        runtime/class_ref.c
+        runtime/class_ref.h
+        runtime/field_ref.c
+        runtime/field_ref.h
+        runtime/method_ref.c
+        runtime/method_ref.h
+        runtime/interface_method_ref.c
+        runtime/interface_method_ref.h
         runtime/class_loader.c
         runtime/class_loader.h
         runtime/slot.c

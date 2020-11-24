@@ -34,10 +34,10 @@ void start_tjvm() {
         return;
     }
 
-//    struct method *main_method = get_main_method(clazz);
-//    struct bytecode_interpreter *b = build_bytecode_interpreter();
-//    struct thread *thread = create_thread();
-//    execute(b, thread, main_method);
+    struct method *main_method = get_main_method(clazz);
+    struct bytecode_interpreter *b = build_bytecode_interpreter();
+    struct thread *thread = create_thread();
+    execute(b, thread, main_method);
 }
 
 struct method *get_main_method(struct i_klass *clazz) {

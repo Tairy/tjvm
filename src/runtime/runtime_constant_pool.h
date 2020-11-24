@@ -10,36 +10,10 @@
 #include "class_file/class_file.h"
 #include "runtime/class.h"
 #include "class.h"
-
-struct class_ref {
-    char *classname;
-    struct i_klass *clazz;
-    struct runtime_constant_pool *rcp;
-};
-
-struct field_ref {
-    char *classname;
-    struct i_klass *clazz;
-    struct runtime_constant_pool *rcp;
-    char *name;
-    char *descriptor;
-};
-
-struct method_ref {
-    char *classname;
-    struct i_klass *clazz;
-    struct runtime_constant_pool *rcp;
-    char *name;
-    char *descriptor;
-};
-
-struct interface_method_ref {
-    char *classname;
-    struct i_klass *clazz;
-    struct runtime_constant_pool *rcp;
-    char *name;
-    char *descriptor;
-};
+#include "class_ref.h"
+#include "field_ref.h"
+#include "method_ref.h"
+#include "interface_method_ref.h"
 
 struct runtime_constant_pool_info {
     u_int8_t type;
@@ -51,19 +25,7 @@ struct runtime_constant_pool {
     struct runtime_constant_pool_info **infos;
 };
 
-struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
-                                struct class_loader *class_loader);
-
-struct field_ref *new_field_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
-                                struct class_loader *class_loader);
-
-struct method_ref *
-new_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
-               struct class_loader *class_loader);
-
-struct interface_method_ref *
-new_interface_method_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp,
-                         struct class_loader *class_loader);
+static void get_name_and_descriptor(struct cp *cp, u_int16_t index, char **name, char **descriptor);
 
 struct runtime_constant_pool *build_runtime_constant_pool(struct class_loader *class_loader, struct cp *cp);
 

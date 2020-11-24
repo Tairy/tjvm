@@ -9,6 +9,7 @@
 
 #include "thread.h"
 #include "class.h"
+#include "method.h"
 #include "local_vars.h"
 #include "operand_stack.h"
 

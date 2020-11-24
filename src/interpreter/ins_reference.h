@@ -36,7 +36,12 @@ void insm_185(struct frame *frame, struct bytecode_reader *reader) {}
 
 void insm_186(struct frame *frame, struct bytecode_reader *reader) {}
 
-void insm_187(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_187(struct frame *frame, struct bytecode_reader *reader) {
+    // NEW
+    u_int16_t class_index = read_uint16(reader);
+    struct class_ref *class_ref = frame->method->clazz->runtime_constant_pool->infos[class_index]->data;
+//    struct i_klass *clazz =
+}
 
 void insm_188(struct frame *frame, struct bytecode_reader *reader) {}
 
