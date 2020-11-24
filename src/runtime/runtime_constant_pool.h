@@ -25,9 +25,9 @@ struct runtime_constant_pool {
     struct runtime_constant_pool_info **infos;
 };
 
-static void get_name_and_descriptor(struct cp *cp, u_int16_t index, char **name, char **descriptor);
+void get_name_and_descriptor(struct cp *cp, u_int16_t index, char **name, char **descriptor);
 
-struct runtime_constant_pool *build_runtime_constant_pool(struct class_loader *class_loader, struct cp *cp);
+struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp);
 
 struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime_constant_pool *rcp, u_int32_t index);
 

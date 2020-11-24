@@ -45,8 +45,6 @@ add_executable(tjvm
         runtime/class_loader.h
         runtime/slot.c
         runtime/slot.h
-        runtime/oop.c
-        runtime/oop.h
         runtime/runtime_constant_pool.c
         runtime/runtime_constant_pool.h
         util/log.c

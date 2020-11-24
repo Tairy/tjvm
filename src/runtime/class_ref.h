@@ -16,5 +16,6 @@ struct class_ref {
 
 struct class_ref *new_class_ref(struct runtime_constant_pool *rcp, struct cp_info *cp_info, struct cp *cp);
 
+void resolve_class_ref(struct class_ref *class_ref, struct class_loader *class_loader);
 
 #endif //TJVMSRC_CLASS_REF_H

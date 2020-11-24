@@ -20,9 +20,7 @@ struct i_klass *new_klass(struct class_loader *class_loader, struct class_file *
             class_file->constant_pool->infos[class_file->super_class]->v1
     );
     clazz->origin_constant_pool = class_file->constant_pool;
-
-    // todo 运行时常量池的作用有待继续深入理解
-    clazz->runtime_constant_pool = build_runtime_constant_pool(class_loader, clazz->origin_constant_pool);
+    clazz->runtime_constant_pool = build_runtime_constant_pool(clazz->origin_constant_pool);
     clazz->fields = new_fields(clazz, class_file->fields);
     clazz->methods = new_methods(clazz, class_file->methods);
     return clazz;

@@ -9,6 +9,8 @@
 #include "runtime/class.h"
 #include "bytecode_reader.h"
 #include "bytecode_interpreter.h"
+#include "runtime/class_ref.h"
+#include "runtime/object.h"
 
 void insm_178(struct frame *frame, struct bytecode_reader *reader) {
     // GETSTATIC 获取指定类的静态类，并将其压入栈顶
@@ -40,7 +42,11 @@ void insm_187(struct frame *frame, struct bytecode_reader *reader) {
     // NEW
     u_int16_t class_index = read_uint16(reader);
     struct class_ref *class_ref = frame->method->clazz->runtime_constant_pool->infos[class_index]->data;
-//    struct i_klass *clazz =
+    resolve_class_ref(class_ref, frame->method->clazz->class_loader);
+
+    // TODO 未验证类的可访问性
+    struct object *ref = new_object(class_ref->clazz);
+    push_ref(frame->operand_stack, ref);
 }
 
 void insm_188(struct frame *frame, struct bytecode_reader *reader) {}

@@ -4,7 +4,7 @@
 
 #include "runtime_constant_pool.h"
 
-struct runtime_constant_pool *build_runtime_constant_pool(struct class_loader *class_loader, struct cp *cp) {
+struct runtime_constant_pool *build_runtime_constant_pool(struct cp *cp) {
     struct runtime_constant_pool *rcp = (struct runtime_constant_pool *) malloc(sizeof(struct runtime_constant_pool));
     rcp->size = cp->len;
     struct runtime_constant_pool_info **infos = malloc(sizeof(struct runtime_constant_pool_info *) * rcp->size);
@@ -35,6 +35,9 @@ struct runtime_constant_pool *build_runtime_constant_pool(struct class_loader *c
             case CONSTANT_Interface_Method_ref_info:
                 infos[i]->data = new_interface_method_ref(rcp, cp->infos[i], cp);
                 break;
+            default:
+                infos[i]->data = NULL;
+                break;
         }
     }
 
@@ -46,7 +49,7 @@ struct runtime_constant_pool_info *get_runtime_constant_pool_info(struct runtime
     return rcp->infos[index];
 }
 
-static void get_name_and_descriptor(struct cp *cp, u_int16_t index, char **name, char **descriptor) {
+void get_name_and_descriptor(struct cp *cp, u_int16_t index, char **name, char **descriptor) {
     struct cp_info *name_and_type = cp->infos[index];
     *name = (char *) (cp->infos[(u_int16_t) name_and_type->v1])->v2;
     *descriptor = (char *) (cp->infos[(u_int16_t) name_and_type->v2])->v2;
