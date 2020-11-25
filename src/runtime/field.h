@@ -32,25 +32,25 @@ struct fields {
 
 struct fields *new_fields(struct i_klass *clazz, struct member_infos *fields);
 
-int8_t is_public(struct field *field);
+int8_t is_field_public(struct field *field);
 
-int8_t is_final(struct field *field);
+int8_t is_field_final(struct field *field);
 
-int8_t is_protected(struct field *field);
+int8_t is_field_protected(struct field *field);
 
-int8_t is_abstract(struct field *field);
+int8_t is_field_abstract(struct field *field);
 
-int8_t is_static(struct field *field);
+int8_t is_field_static(struct field *field);
 
-int8_t is_synthetic(struct field *field);
+int8_t is_field_synthetic(struct field *field);
 
-int8_t is_enum(struct field *field);
+int8_t is_field_enum(struct field *field);
 
-int8_t is_volatile(struct field *field);
+int8_t is_field_volatile(struct field *field);
 
-int8_t is_transient(struct field *field);
+int8_t is_field_transient(struct field *field);
 
-int8_t is_long_or_double(struct field *field);
+int8_t is_field_long_or_double(struct field *field);
 
 
 #endif //TJVMSRC_FIELD_H

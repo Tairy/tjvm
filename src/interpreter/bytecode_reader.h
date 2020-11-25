@@ -17,9 +17,6 @@ static u_int8_t next_uint8(struct bytecode_reader *r) {
 }
 
 static int8_t next_int8(struct bytecode_reader *r) {
-//    int8_t x = *((int8_t *) r->code);
-//    r->pc++;
-//    return x;
     return (int8_t) r->code[r->pc++];
 }
 

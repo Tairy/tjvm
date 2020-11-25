@@ -31,7 +31,6 @@ void push_frame(struct thread *thread, struct frame *frame) {
     }
 
     thread->stack->top_frame = frame;
-
     thread->stack->size++;
 }
 

@@ -230,12 +230,14 @@ struct bytecode_interpreter *build_bytecode_interpreter() {
 int execute(struct bytecode_interpreter *bytecode_interpreter, struct thread *thread, struct method *method) {
     struct frame *frame = new_frame(thread, method);
     push_frame(thread, frame);
+
+    // todo: reader need free.
     struct bytecode_reader *reader = (struct bytecode_reader *) malloc(sizeof(struct bytecode_reader));
     struct frame *current;
     while ((current = top_frame(thread)) != NULL) {
-        thread->pc = frame->next_pc;
+        thread->pc = current->next_pc;
         reader->code = current->method->code;
-        reader->pc = frame->next_pc;
+        reader->pc = current->next_pc;
         u_int8_t op_code = next_uint8(reader);
         printf("%x\t", op_code);
         (*bytecode_interpreter->call[op_code])(current, reader);

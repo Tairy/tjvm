@@ -2,8 +2,8 @@
 // Created by tairy on 2020/11/14.
 //
 
-#include <string.h>
-#include <zip.h>
+#include "string.h"
+#include "zip.h"
 
 #include "util/file.h"
 #include "util/log.h"
@@ -80,20 +80,10 @@ struct class_source *read_class(struct class_path *class_path, char *class_name)
 
 static char *class_name_2_path(char *class_name) {
     unsigned int len = strlen(class_name);
-    char *r = malloc(len + 1);
-
-    memset(r, 0, len + 1);
-
-    while (len--) {
-        char *x = class_name + len;
-        if (class_name[len] == '.' && strlen(x) != 5 && strcmp(x, ".class") != 0) {
-            r[len] = '/';
-        } else {
-            r[len] = class_name[len];
-        }
-    }
-
-    return r;
+    char *class_file_name_suffix = ".class";
+    char *class_file_name = (char *) malloc(strlen(class_file_name_suffix) + len);
+    sprintf(class_file_name, "%s%s", class_name, class_file_name_suffix);
+    return class_file_name;
 }
 
 // TODO： 临时拼了一个函数，后续再完善
@@ -138,7 +128,7 @@ static struct class_source *read_class_in_jar(char *jar_path, char *class_name) 
         return NULL;
     }
 
-    const char *name = class_name;
+    const char *name = class_name_2_path(class_name);
     struct zip_stat stat;
     zip_stat_init(&stat);
     zip_stat(z, name, 0, &stat);
@@ -164,7 +154,7 @@ static struct class_source *read_class_in_dir(char *dir, char *class_name) {
     struct class_source *source = NULL;
     unsigned int path_len = strlen(dir);
     struct tjvm_files *files = list_dir(dir, ".class", 1);
-    char *c_path = get_class_file_name(class_name);
+    char *c_path = class_name_2_path(class_name);
 
     for (int i = 0, size = files->len; i < size; i++) {
         struct tjvm_file *f = files->files[i];

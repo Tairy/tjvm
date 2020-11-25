@@ -28,4 +28,14 @@ struct methods {
 
 struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_methods);
 
+int8_t is_method_public(struct method *method);
+
+int8_t is_method_final(struct method *method);
+
+int8_t is_method_protected(struct method *method);
+
+int8_t is_method_abstract(struct method *method);
+
+int8_t is_method_static(struct method *method);
+
 #endif //TJVMSRC_METHOD_H

@@ -42,4 +42,14 @@ struct im_klass {
 
 struct i_klass *new_klass(struct class_loader *class_loader, struct class_file *class_file);
 
+int8_t is_class_public(struct i_klass *clazz);
+
+int8_t is_class_final(struct i_klass *clazz);
+
+int8_t is_class_protected(struct i_klass *clazz);
+
+int8_t is_class_abstract(struct i_klass *clazz);
+
+int8_t is_class_static(struct i_klass *clazz);
+
 #endif //TJVMSRC_CLASS_H

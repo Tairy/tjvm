@@ -65,18 +65,27 @@ struct i_klass *load_no_array_class(struct class_loader *class_loader, char *cla
 
 struct i_klass *define_class(struct class_loader *class_loader, struct class_file *class_file) {
     struct i_klass *clazz = new_klass(class_loader, class_file);
-    printf("access_flags: %d, class_name: %s, super_class_name: %s\n",
-           clazz->access_flags,
-           clazz->name,
-           clazz->super_class_name
-    );
+    if (strcmp(clazz->name, "java/lang/Object") != 0) {
+        printf("access_flags: %d, class_name: %s, super_class_name: %s\n",
+               clazz->access_flags,
+               clazz->name,
+               clazz->super_class_name
+        );
+    } else {
+        printf("access_flags: %d, class_name: %s\n",
+               clazz->access_flags,
+               clazz->name
+        );
+    }
     resolve_super_class(clazz);
     resolve_interfaces(clazz);
 }
 
 void resolve_super_class(struct i_klass *clazz) {
-    if (strcmp(clazz->super_class_name, "java/lang/Object") != 0) {
+    if (strcmp(clazz->name, "java/lang/Object") != 0) {
         clazz->super_class = load_class(clazz->class_loader, clazz->super_class_name);
+    } else {
+        clazz->super_class = NULL;
     }
 }
 
@@ -109,10 +118,10 @@ void cal_instance_field_slot_ids(struct i_klass *clazz) {
 
     for (int i = 0, len = clazz->fields->size; i < len; i++) {
         struct field *field = clazz->fields->fields[i];
-        if (is_static(field) == 0) {
+        if (is_field_static(field) == 0) {
             field->slot_index = slot_index;
             slot_index++;
-            if (is_long_or_double(field)) {
+            if (is_field_long_or_double(field)) {
                 slot_index++;
             }
         }
@@ -125,10 +134,10 @@ void cal_static_field_slot_ids(struct i_klass *clazz) {
 
     for (int i = 0, len = clazz->fields->size; i < len; i++) {
         struct field *field = clazz->fields->fields[i];
-        if (is_static(field) == 1) {
+        if (is_field_static(field) == 1) {
             field->slot_index = slot_index;
             slot_index++;
-            if (is_long_or_double(field)) {
+            if (is_field_long_or_double(field)) {
                 slot_index++;
             }
         }
@@ -140,7 +149,7 @@ void alloc_and_init_static_vars(struct i_klass *clazz) {
     clazz->static_vars = malloc(sizeof(union slot) * clazz->static_slot_count);
     for (int i = 0, len = clazz->fields->size; i < len; i++) {
         struct field *field = clazz->fields->fields[i];
-        if (is_static(field) == 1 && is_final(field) == 1) {
+        if (is_field_static(field) == 1 && is_field_final(field) == 1) {
             init_static_final_var(clazz, field);
         }
     }

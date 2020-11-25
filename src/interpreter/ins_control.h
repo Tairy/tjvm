@@ -100,6 +100,7 @@ void insm_176(struct frame *frame, struct bytecode_reader *reader) {
 
 void insm_177(struct frame *frame, struct bytecode_reader *reader) {
     // OP_RETURN
+    pop_frame(frame->thread);
     UPDATE_PC_AND_CONTINUE
 }
 

@@ -4,6 +4,9 @@
 
 #include "method.h"
 #include "class_file/member_info.h"
+#include "access_flags.h"
+
+//u_int32_t calc_arg_count(char* des)
 
 struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_methods) {
     struct methods *m = (struct methods *) malloc(sizeof(struct methods));
@@ -17,6 +20,7 @@ struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_m
         methods[i]->access_flags = current_member_info->access_flags;
         methods[i]->name = get_utf8(clazz->origin_constant_pool, current_member_info->name_index);
         methods[i]->descriptor = get_utf8(clazz->origin_constant_pool, current_member_info->description_index);
+//        methods[i]->arg_count =
 
         for (int j = 0; j < current_member_info->attributes->size; j++) {
             char *attr_name = get_utf8(clazz->origin_constant_pool,
@@ -34,4 +38,39 @@ struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_m
 
     m->methods = methods;
     return m;
+}
+
+int8_t is_method_public(struct method *method) {
+    if (((method->access_flags) & ACC_PUBLIC) == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+int8_t is_method_final(struct method *method) {
+    if (((method->access_flags) & ACC_FINAL) == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+int8_t is_method_protected(struct method *method) {
+    if (((method->access_flags) & ACC_PROTECTED) == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+int8_t is_method_abstract(struct method *method) {
+    if (((method->access_flags) & ACC_ABSTRACT) == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+int8_t is_method_static(struct method *method) {
+    if (((method->access_flags) & ACC_STATIC) == 0) {
+        return 0;
+    }
+    return 1;
 }

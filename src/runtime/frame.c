@@ -12,5 +12,6 @@ struct frame *new_frame(struct thread *thread, struct method *method) {
     frame->operand_stack = new_operand_stack(method->max_stack);
     frame->thread = thread;
     frame->method = method;
+    frame->next_pc = 0;
     return frame;
 }

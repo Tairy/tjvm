@@ -69,6 +69,8 @@ add_executable(tjvm
         interpreter/ins_reference.h
         interpreter/ins_extend.h
         interpreter/ins_reserved.h
+        gc/object_mark.c
+        gc/object_mark.h
         tjvm.c)
 
 target_link_libraries(tjvm -lzip)
