@@ -5,8 +5,11 @@
 #include "method.h"
 #include "class_file/member_info.h"
 #include "access_flags.h"
+#include "method_descriptor_parser.h"
+#include "method_descriptor.h"
+#include "string.h"
 
-//u_int32_t calc_arg_count(char* des)
+u_int32_t calc_arg_slot_count(struct method *method);
 
 struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_methods) {
     struct methods *m = (struct methods *) malloc(sizeof(struct methods));
@@ -20,7 +23,7 @@ struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_m
         methods[i]->access_flags = current_member_info->access_flags;
         methods[i]->name = get_utf8(clazz->origin_constant_pool, current_member_info->name_index);
         methods[i]->descriptor = get_utf8(clazz->origin_constant_pool, current_member_info->description_index);
-//        methods[i]->arg_count =
+        methods[i]->arg_count = calc_arg_slot_count(methods[i]);
 
         for (int j = 0; j < current_member_info->attributes->size; j++) {
             char *attr_name = get_utf8(clazz->origin_constant_pool,
@@ -38,6 +41,25 @@ struct methods *new_methods(struct i_klass *clazz, struct member_infos *origin_m
 
     m->methods = methods;
     return m;
+}
+
+u_int32_t calc_arg_slot_count(struct method *method) {
+    struct method_descriptor *method_descriptor = parse_method_descriptor(method->descriptor);
+    u_int32_t slot_count = 0;
+
+    for (int i = 0; i < method_descriptor->param_size; i++) {
+        slot_count++;
+        if (strcmp(method_descriptor->param_types[i], "J") == 0 ||
+            strcmp(method_descriptor->param_types[i], "D") == 0) {
+            slot_count++;
+        }
+    }
+
+    if (is_method_static(method) == 0) {
+        slot_count++;
+    }
+
+    return slot_count;
 }
 
 int8_t is_method_public(struct method *method) {

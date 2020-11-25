@@ -47,6 +47,9 @@ add_executable(tjvm
         runtime/slot.h
         runtime/runtime_constant_pool.c
         runtime/runtime_constant_pool.h
+        runtime/method_descriptor.h
+        runtime/method_descriptor_parser.c
+        runtime/method_descriptor_parser.h
         util/log.c
         util/log.h
         util/file.c

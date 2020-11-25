@@ -47,7 +47,12 @@ void insm_183(struct frame *frame, struct bytecode_reader *reader) {
     struct frame *n_frame = new_frame(frame->thread, method_ref->method);
     push_frame(frame->thread, n_frame);
 
-    
+    if (method_ref->method->arg_count > 0) {
+        for (int i = (int) (method_ref->method->arg_count - 1); i >= 0; i--) {
+            union slot *slot = pop_var(frame->operand_stack);
+            set_var(n_frame->local_vars->vars, i, slot);
+        }
+    }
 }
 
 void insm_184(struct frame *frame, struct bytecode_reader *reader) {}
