@@ -87,5 +87,5 @@ double pop_double(struct operand_stack *stack) {
 }
 
 void *get_ref_from_top(struct operand_stack *stack, int32_t index) {
-
+    return stack->slots[stack->size - index];
 }

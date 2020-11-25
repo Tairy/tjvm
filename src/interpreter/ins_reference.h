@@ -30,7 +30,33 @@ void insm_180(struct frame *frame, struct bytecode_reader *reader) {}
 
 void insm_181(struct frame *frame, struct bytecode_reader *reader) {}
 
-void insm_182(struct frame *frame, struct bytecode_reader *reader) {}
+void insm_182(struct frame *frame, struct bytecode_reader *reader) {
+    // OP_INVOKEVIRTUAL
+    u_int16_t method_ref_index = read_uint16(reader);
+    struct i_klass *current_clazz = frame->method->clazz;
+    struct method_ref *method_ref = current_clazz->runtime_constant_pool->infos[method_ref_index]->data;
+    resolve_method_ref(method_ref, current_clazz);
+    if (is_method_static(method_ref->method) == 1) {
+        log_error(__FILE__, __LINE__, "java.lang.IncompatibleClassChangeError.");
+        return;
+    }
+
+    union slot *ref = get_ref_from_top(frame->operand_stack, method_ref->method->arg_count - 1);
+    if (ref == NULL) {
+        log_error(__FILE__, __LINE__, "java.lang.NullPointerException.");
+        return;
+    }
+
+    struct frame *n_frame = new_frame(frame->thread, method_ref->method);
+    push_frame(frame->thread, n_frame);
+    if (method_ref->method->arg_count > 0) {
+        for (int i = (int) (method_ref->method->arg_count - 1); i >= 0; i--) {
+            union slot *slot = pop_var(frame->operand_stack);
+            set_var(n_frame->local_vars->vars, i, slot);
+        }
+    }
+    UPDATE_PC_AND_CONTINUE
+}
 
 void insm_183(struct frame *frame, struct bytecode_reader *reader) {
     // OP_INVOKESPECIAL 调用超类构造方法，实例初始化方法，私有方法
@@ -44,15 +70,21 @@ void insm_183(struct frame *frame, struct bytecode_reader *reader) {
         return;
     }
 
+    union slot *ref = get_ref_from_top(frame->operand_stack, method_ref->method->arg_count - 1);
+    if (ref == NULL) {
+        log_error(__FILE__, __LINE__, "java.lang.NullPointerException.");
+        return;
+    }
+
     struct frame *n_frame = new_frame(frame->thread, method_ref->method);
     push_frame(frame->thread, n_frame);
-
     if (method_ref->method->arg_count > 0) {
         for (int i = (int) (method_ref->method->arg_count - 1); i >= 0; i--) {
             union slot *slot = pop_var(frame->operand_stack);
             set_var(n_frame->local_vars->vars, i, slot);
         }
     }
+    UPDATE_PC_AND_CONTINUE
 }
 
 void insm_184(struct frame *frame, struct bytecode_reader *reader) {}

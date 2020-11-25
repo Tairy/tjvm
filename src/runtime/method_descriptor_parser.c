@@ -78,9 +78,11 @@ void parse_param_types(struct method_descriptor_parser *parser) {
 }
 
 void check_param_end(struct method_descriptor_parser *parser) {
-    if (parser->raw[parser->offset++] != ')') {
+    if (parser->raw[parser->offset] != ')') {
         log_error(__FILE__, __LINE__, "method descriptor check end error: %s\n", parser->raw);
     }
+
+    parser->offset++;
 }
 
 void parse_return_type(struct method_descriptor_parser *parser) {
@@ -92,25 +94,25 @@ void parse_return_type(struct method_descriptor_parser *parser) {
 }
 
 char *parse_object_type(struct method_descriptor_parser *parser) {
-    parser->offset--;
-    u_int16_t len = strlen(parser->raw) - parser->offset + 1;
+    u_int16_t len = strlen(parser->raw) - parser->offset;
     char *str = malloc(len);
     memset(str, 0, len);
     while (parser->raw[parser->offset] != ';') {
         sprintf(str, "%s%c", str, parser->raw[parser->offset++]);
     }
     str[parser->offset] = '\0';
+    parser->offset++;
     return str;
 }
 
 char *parse_array_type(struct method_descriptor_parser *parser) {
-    parser->offset--;
-    u_int16_t len = strlen(parser->raw) - parser->offset + 1;
+    u_int16_t len = strlen(parser->raw) - parser->offset;
     char *str = malloc(len);
     memset(str, 0, len);
     while (parser->raw[parser->offset] != ';') {
         sprintf(str, "%s%c", str, parser->raw[parser->offset++]);
     }
     str[parser->offset] = '\0';
+    parser->offset++;
     return str;
 }

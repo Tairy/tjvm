@@ -134,6 +134,7 @@ void insm_42(struct frame *frame, struct bytecode_reader *reader) {
 }
 
 void insm_43(struct frame *frame, struct bytecode_reader *reader) {
+    // ALOAD_1
     push_ref(frame->operand_stack, get_ref(frame->local_vars->vars, 1));
     UPDATE_PC_AND_CONTINUE
 }

@@ -234,7 +234,7 @@ int execute(struct bytecode_interpreter *bytecode_interpreter, struct thread *th
     // todo: reader need free.
     struct bytecode_reader *reader = (struct bytecode_reader *) malloc(sizeof(struct bytecode_reader));
     struct frame *current;
-    while ((current = top_frame(thread)) != NULL) {
+    while ((current = top_frame(thread)) != NULL && current->thread->stack->size > 0) {
         thread->pc = current->next_pc;
         reader->code = current->method->code;
         reader->pc = current->next_pc;
